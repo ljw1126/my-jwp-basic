@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nhnnext</groupId>
-	<artifactId>jwp-basic</artifactId>
+	<artifactId>my-jwp-basic</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
 
@@ -11,15 +11,22 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-		<tomcat.version>8.0.15</tomcat.version>
+		<tomcat.version>8.0.53</tomcat.version>
 	</properties>
 
 	<dependencies>
 		<!-- unit testing -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.23.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -29,7 +36,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -79,6 +86,7 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -108,7 +116,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>jwp-basic</finalName>
+		<finalName>my-jwp-basic</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<outputDirectory>webapp/WEB-INF/classes</outputDirectory>
