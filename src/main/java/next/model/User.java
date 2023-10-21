@@ -43,4 +43,20 @@ public class User {
     public int hashCode() {
         return Objects.hash(userId, password, name, email);
     }
+
+    public boolean isSameUser(User user) {
+        return this.userId.equals(user.userId);
+    }
+
+    public boolean matchPassword(String password) {
+        if(password == null) return false;
+
+        return this.password.equals(password);
+    }
+
+    public void update(User updateUser) {
+        this.password = updateUser.password;
+        this.name = updateUser.name;
+        this.email = updateUser.email;
+    }
 }
