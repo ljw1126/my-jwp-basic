@@ -15,39 +15,29 @@ public class UserDao {
     public void insert(User user) throws SQLException {
         MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate() {
             @Override
-            protected void setValues(User user, PreparedStatement ps) throws SQLException {
+            protected void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, user.getUserId());
                 ps.setString(2, user.getPassword());
                 ps.setString(3, user.getName());
                 ps.setString(4, user.getEmail());
             }
-
-            @Override
-            protected String createQuery() {
-                return "INSERT INTO USERS VALUES(?, ?, ?, ?)";
-            }
         };
-        jdbcTemplate.update(user);
+        jdbcTemplate.update("INSERT INTO USERS VALUES(?, ?, ?, ?)");
     }
 
 
     public void update(User user) throws SQLException {
         MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate() {
             @Override
-            protected void setValues(User user, PreparedStatement pstmt) throws SQLException {
+            protected void setValues(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getPassword());
                 pstmt.setString(2, user.getName());
                 pstmt.setString(3, user.getEmail());
                 pstmt.setString(4, user.getUserId());
             }
-
-            @Override
-            protected String createQuery() {
-                return "UPDATE USERS SET password = ?, name = ?, email = ? WHERE userId = ?";
-            }
         };
 
-        jdbcTemplate.update(user);
+        jdbcTemplate.update("UPDATE USERS SET password = ?, name = ?, email = ? WHERE userId = ?");
     }
 
 
