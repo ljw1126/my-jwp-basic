@@ -1,6 +1,7 @@
 package next.dao;
 
 import core.jdbc.ConnectionManager;
+import core.jdbc.MyJdbcTemplate;
 import next.model.User;
 
 import java.sql.Connection;
@@ -12,28 +13,28 @@ import java.util.List;
 
 public class UserDao {
     public void insert(User user) throws SQLException {
-        InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate() {
+        MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate() {
             @Override
-            void setValuesForInsert(User user, PreparedStatement pstmt) throws SQLException {
-                pstmt.setString(1, user.getUserId());
-                pstmt.setString(2, user.getPassword());
-                pstmt.setString(3, user.getName());
-                pstmt.setString(4, user.getEmail());
+            protected void setValues(User user, PreparedStatement ps) throws SQLException {
+                ps.setString(1, user.getUserId());
+                ps.setString(2, user.getPassword());
+                ps.setString(3, user.getName());
+                ps.setString(4, user.getEmail());
             }
 
             @Override
-            String createQueryForInsert() {
+            protected String createQuery() {
                 return "INSERT INTO USERS VALUES(?, ?, ?, ?)";
             }
         };
-        insertJdbcTemplate.insert(user);
+        jdbcTemplate.update(user);
     }
 
 
     public void update(User user) throws SQLException {
-        UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate() {
+        MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate() {
             @Override
-            void setValuesForUpdate(User user, PreparedStatement pstmt) throws SQLException {
+            protected void setValues(User user, PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getPassword());
                 pstmt.setString(2, user.getName());
                 pstmt.setString(3, user.getEmail());
@@ -41,12 +42,12 @@ public class UserDao {
             }
 
             @Override
-            String createQueryForUpdate() {
+            protected String createQuery() {
                 return "UPDATE USERS SET password = ?, name = ?, email = ? WHERE userId = ?";
             }
         };
 
-        updateJdbcTemplate.update(user);
+        jdbcTemplate.update(user);
     }
 
 
