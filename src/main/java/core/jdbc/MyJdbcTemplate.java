@@ -10,70 +10,77 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MyJdbcTemplate<T> {
+public class MyJdbcTemplate<T> {
     private static final Logger log = LoggerFactory.getLogger(MyJdbcTemplate.class);
-    public void update(String query){
+    public void update(String query, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         try (
             Connection con = ConnectionManager.getConnection();
             PreparedStatement ps = con.prepareStatement(query);
         ){
-            setValues(ps);
+            preparedStatementSetter.values(ps);
             ps.executeUpdate();
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
     }
 
-    public List<T> query(String query) throws SQLException {
+    public List<T> query(String query, PreparedStatementSetter preparedStatementSetter, RowMapper<T> rowMapper) throws DataAccessException {
         List<T> result = new ArrayList<>();
-
-        Connection con = null;
-        PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(query);
 
+        try (
+             Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+        ) {
+            preparedStatementSetter.values(ps);
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                result.add(mapRow(rs));
+                result.add(rowMapper.mapRow(rs));
             }
 
             return result;
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         } finally {
-            if(rs != null) rs.close();
-            if(ps != null) ps.close();
-            if(con != null) con.close();
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
     }
 
-    public T queryForObject(String query) throws SQLException {
-        Connection con = null;
-        PreparedStatement ps = null;
+    public T queryForObject(String query, PreparedStatementSetter preparedStatementSetter, RowMapper<T> rowMapper) throws DataAccessException {
         ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(query);
 
-            setValues(ps);
-
-            rs = ps.executeQuery();
+        try (
+             Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+        ){
+           preparedStatementSetter.values(ps);
+           rs = ps.executeQuery();
 
             T result = null;
             while(rs.next()) {
-                result = mapRow(rs);
+                result = rowMapper.mapRow(rs);
             }
 
             return result;
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         } finally {
-            if(rs != null) rs.close();
-            if(ps != null) ps.close();
-            if(con != null) con.close();
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
     }
-
-    abstract protected void setValues(PreparedStatement ps) throws SQLException;
-
-    abstract protected T mapRow(ResultSet rs) throws SQLException;
 }
