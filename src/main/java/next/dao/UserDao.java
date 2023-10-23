@@ -1,7 +1,6 @@
 package next.dao;
 
 import core.jdbc.MyJdbcTemplate;
-import core.jdbc.MySelectJdbcTemplate;
 import next.model.User;
 
 import java.sql.PreparedStatement;
@@ -19,6 +18,11 @@ public class UserDao {
                 ps.setString(3, user.getName());
                 ps.setString(4, user.getEmail());
             }
+
+            @Override
+            protected Object mapRow(ResultSet rs) throws SQLException {
+                return null;
+            }
         };
         jdbcTemplate.update("INSERT INTO USERS VALUES(?, ?, ?, ?)");
     }
@@ -33,6 +37,11 @@ public class UserDao {
                 pstmt.setString(3, user.getEmail());
                 pstmt.setString(4, user.getUserId());
             }
+
+            @Override
+            protected Object mapRow(ResultSet rs) throws SQLException {
+                return null;
+            }
         };
 
         jdbcTemplate.update("UPDATE USERS SET password = ?, name = ?, email = ? WHERE userId = ?");
@@ -40,7 +49,7 @@ public class UserDao {
 
 
     public List<User> findAll() throws SQLException {
-        MySelectJdbcTemplate<User> jdbcTemplate = new MySelectJdbcTemplate() {
+        MyJdbcTemplate<User> jdbcTemplate = new MyJdbcTemplate() {
             @Override
             protected void setValues(PreparedStatement ps) throws SQLException {
             }
@@ -57,7 +66,7 @@ public class UserDao {
     }
 
     public User findByUserId(String userId) throws SQLException {
-        MySelectJdbcTemplate<User> jdbcTemplate = new MySelectJdbcTemplate() {
+        MyJdbcTemplate<User> jdbcTemplate = new MyJdbcTemplate() {
             @Override
             protected void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, userId);
