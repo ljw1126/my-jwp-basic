@@ -24,37 +24,19 @@ public class MyJdbcTemplate<T> {
         }
     }
 
-    public List<T> query(String query, PreparedStatementSetter preparedStatementSetter, RowMapper<T> rowMapper) throws DataAccessException {
-        List<T> result = new ArrayList<>();
-        ResultSet rs = null;
-
-        try (
-             Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(query);
-        ) {
-            preparedStatementSetter.values(ps);
-            rs = ps.executeQuery();
-
-            while(rs.next()) {
-                result.add(rowMapper.mapRow(rs));
-            }
-
-            return result;
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        } finally {
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-        }
+    public void update(String query, Object... parameters) {
+        update(query, createPreparedStatementSetter(parameters));
     }
 
-    public T queryForObject(String query, PreparedStatementSetter preparedStatementSetter, RowMapper<T> rowMapper) throws DataAccessException {
+    private PreparedStatementSetter createPreparedStatementSetter(Object... parameters) {
+        return (ps) -> {
+            for(int i = 1; i <= parameters.length; i++) {
+                ps.setString(i, String.valueOf(parameters[i - 1]));
+            }
+        };
+    }
+
+    public T queryForObject(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         ResultSet rs = null;
 
         try (
@@ -82,5 +64,43 @@ public class MyJdbcTemplate<T> {
             }
 
         }
+    }
+
+    public T queryForObject(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
+        return queryForObject(query, rowMapper, createPreparedStatementSetter(parameters));
+    }
+
+    public List<T> query(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
+        List<T> result = new ArrayList<>();
+        ResultSet rs = null;
+
+        try (
+            Connection con = ConnectionManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+        ) {
+            preparedStatementSetter.values(ps);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                result.add(rowMapper.mapRow(rs));
+            }
+
+            return result;
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        }
+    }
+
+    public List<T> query(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
+        return query(query, rowMapper, createPreparedStatementSetter(parameters));
     }
 }
