@@ -3,6 +3,7 @@ package core.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +29,24 @@ public class MyJdbcTemplate<T> {
         update(query, createPreparedStatementSetter(parameters));
     }
 
+    // AnswerDao에서 PreparedStatementCreator 구현해서 콜백 함수 실행
+    public void update(PreparedStatementCreator psc, KeyHolder holder) throws DataAccessException {
+        try (Connection con = ConnectionManager.getConnection()){
+            PreparedStatement ps = psc.createPreparedStatement(con);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys(); // 자동 생성키를 찾아오거나, null 리턴
+            if(rs.next()) {
+                holder.setId(rs.getLong(1)); // 1번 인덱스는 answerId, AnswerDao에서 사용
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
     private PreparedStatementSetter createPreparedStatementSetter(Object... parameters) {
         return (ps) -> {
             for(int i = 1; i <= parameters.length; i++) {
@@ -37,33 +56,10 @@ public class MyJdbcTemplate<T> {
     }
 
     public T queryForObject(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
-        ResultSet rs = null;
+        List<T> list = query(query, rowMapper, preparedStatementSetter);
+        if(list.isEmpty()) return null;
 
-        try (
-             Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(query);
-        ){
-           preparedStatementSetter.values(ps);
-           rs = ps.executeQuery();
-
-            T result = null;
-            while(rs.next()) {
-                result = rowMapper.mapRow(rs);
-            }
-
-            return result;
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        } finally {
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-        }
+        return list.get(0);
     }
 
     public T queryForObject(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
