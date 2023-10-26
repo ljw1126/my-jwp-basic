@@ -1,6 +1,8 @@
 // 질문의 답변 생성 /qna/show.jsp
-$(".answerWrite input[type=submit]").click((event) => {
-  event.preventDefault(); // submit 이 자동으로 동작하는 것을 막는다.
+$(".answerWrite").on("click", "input[type=submit]", addAnswer);
+
+function addAnswer(e) {
+  e.preventDefault(); // submit 이 자동으로 동작하는 것을 막는다.
 
   const queryString = $("form[name=answer]").serialize();
 
@@ -10,14 +12,16 @@ $(".answerWrite input[type=submit]").click((event) => {
     data: queryString,
     dataType: 'json',
     success: function(result) {
+      const data = result.data;
+      console.log(data);
       const answerTemplate = $("#answerTemplate").html();
-      const template = answerTemplate.format(result.writer, new Date(result.createdDate), result.contents, result.answerId);
+      const template = answerTemplate.format(data.writer, new Date(data.createdDate), data.contents, data.answerId);
 
       $(".qna-comment-slipp-articles").prepend(template);
     },
     error: console.log
   })
-});
+}
 
 // 답변 삭제 /qna/show.jsp
 $(".qna-comment").on("click", ".form-delete", deleteAnswer);
@@ -34,7 +38,8 @@ function deleteAnswer(e) {
     data: queryString,
     dataType : 'json',
     success: function(result) {
-      if(result.status) {
+      const data = result.data;
+      if(data.status) {
         deleteBtn.closest('article').remove();
       }
     },
@@ -44,8 +49,8 @@ function deleteAnswer(e) {
 
 String.prototype.format = function() {
   const args = arguments;
-  return this.replace(/{\d+}/g, function(match, number) {
-    console.log(match, number); // match는 자체를 반환하고, number는 인덱스인가?
+  return this.replace(/{(\d+)}/g, function(match, number) {
+    // match : {0}, number : 0
     return typeof args[number] != "undefined"
         ? args[number]
         : match;
