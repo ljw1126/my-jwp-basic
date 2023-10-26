@@ -1,14 +1,16 @@
 package core.mvc;
 
-import next.controller.AddAnswerController;
+import next.controller.qna.AddAnswerController;
 import next.controller.HomeController;
-import next.controller.ListUserController;
-import next.controller.LoginController;
-import next.controller.LogoutController;
-import next.controller.ProfileController;
-import next.controller.UpdateFormUserController;
-import next.controller.UpdateUserController;
-import next.controller.CreateUserController;
+import next.controller.qna.DeleteAnswerController;
+import next.controller.qna.ShowController;
+import next.controller.user.ListUserController;
+import next.controller.user.LoginController;
+import next.controller.user.LogoutController;
+import next.controller.user.ProfileController;
+import next.controller.user.UpdateFormUserController;
+import next.controller.user.UpdateUserController;
+import next.controller.user.CreateUserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,10 @@ public class RequestMapping {
         mapping.put("/user/create", new CreateUserController());
         mapping.put("/user/updateForm", new UpdateFormUserController());
         mapping.put("/user/update", new UpdateUserController());
+
+        mapping.put("/qna/show", new ShowController());
         mapping.put("/api/qna/addAnswer", new AddAnswerController());
+        mapping.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         log.info("Init Request Mapping!");
     }
