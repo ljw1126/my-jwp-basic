@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
 import org.slf4j.Logger;
@@ -14,12 +16,12 @@ public class HomeController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
 
         request.setAttribute("questions", questions);
 
-        return "home.jsp";
+        return new JspView("home.jsp");
     }
 }

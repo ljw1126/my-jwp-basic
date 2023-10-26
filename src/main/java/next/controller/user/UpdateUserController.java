@@ -2,6 +2,8 @@ package next.controller.user;
 
 import core.db.DataBase;
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.model.User;
 import next.utils.UserSessionUtils;
 import org.slf4j.Logger;
@@ -14,7 +16,7 @@ public class UpdateUserController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String userId = request.getParameter("userId");
         User user = DataBase.findUserById(userId);
         if(!UserSessionUtils.isSameUser(request.getSession(), user)) {
@@ -27,6 +29,6 @@ public class UpdateUserController implements Controller {
                 request.getParameter("email"));
         log.debug("Update user : {}", updateUser);
         user.update(updateUser);
-        return "redirect:/";
+        return new JspView("redirect:/");
     }
 }
