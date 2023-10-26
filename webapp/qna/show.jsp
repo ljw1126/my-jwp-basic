@@ -119,8 +119,10 @@
                 <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
             </div>
             <div class="article-header-text">
-                {0}
-                <div class="article-header-time">{1}</div>
+                <a href="#" class="article-author-name">{0}</a>
+                <a href="#" class="article-header-time">
+                    <div class="article-header-time">{1}</div>
+                </a>
             </div>
         </div>
         <div class="article-doc comment-doc">
