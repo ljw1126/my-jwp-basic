@@ -1,7 +1,9 @@
 package next.controller.qna;
 
+import core.jdbc.DataAccessException;
 import core.mvc.Controller;
 import core.mvc.JsonView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.AnswerDao;
 import next.model.Result;
@@ -12,13 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteAnswerController implements Controller {
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         long answerId = Long.parseLong(request.getParameter("answerId"));
 
         AnswerDao answerDao = new AnswerDao();
-        answerDao.delete(answerId);
-        request.setAttribute("data", Result.ok());
+        ModelAndView modelAndView = new ModelAndView(null);
 
-        return new JsonView();
+        try {
+            answerDao.delete(answerId);
+            modelAndView.addAttribute("data", Result.ok());
+        } catch (DataAccessException e) {
+            modelAndView.addAttribute("data", Result.fail("error message"));
+        }
+
+        return modelAndView;
     }
 }

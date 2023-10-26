@@ -2,6 +2,7 @@ package next.controller.user;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.UserDao;
 import next.model.User;
@@ -17,7 +18,7 @@ public class CreateUserController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = new User(request.getParameter("userId"), request.getParameter("password"), request.getParameter("name"),
                 request.getParameter("email"));
         log.debug("User : {}", user);
@@ -29,6 +30,6 @@ public class CreateUserController implements Controller {
             log.error(e.getMessage());
         }
 
-        return new JspView("redirect:/");
+        return new ModelAndView("redirect:/");
     }
 }

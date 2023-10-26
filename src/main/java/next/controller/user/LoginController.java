@@ -3,6 +3,7 @@ package next.controller.user;
 import core.db.DataBase;
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.model.User;
 import next.utils.UserSessionUtils;
@@ -18,7 +19,7 @@ public class LoginController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
        String userId = request.getParameter("userId");
        String password = request.getParameter("password");
 
@@ -26,11 +27,11 @@ public class LoginController implements Controller {
 
        if(user == null || !user.matchPassword(password)) {
            request.setAttribute("loginFailed", true);
-           return new JspView("/user/login.jsp");
+           return new ModelAndView("/user/login.jsp");
        } else {
            HttpSession session = request.getSession();
            session.setAttribute(UserSessionUtils.USER_SESSION_KEY, user);
-           return new JspView("redirect:/");
+           return new ModelAndView("redirect:/");
        }
     }
 }

@@ -2,6 +2,7 @@ package next.controller;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
@@ -16,12 +17,12 @@ public class HomeController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
 
         request.setAttribute("questions", questions);
 
-        return new JspView("home.jsp");
+        return new ModelAndView("home.jsp");
     }
 }

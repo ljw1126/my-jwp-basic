@@ -3,6 +3,7 @@ package next.controller.user;
 import core.db.DataBase;
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.model.User;
 import next.utils.UserSessionUtils;
@@ -16,7 +17,7 @@ public class UpdateUserController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String userId = request.getParameter("userId");
         User user = DataBase.findUserById(userId);
         if(!UserSessionUtils.isSameUser(request.getSession(), user)) {
@@ -29,6 +30,7 @@ public class UpdateUserController implements Controller {
                 request.getParameter("email"));
         log.debug("Update user : {}", updateUser);
         user.update(updateUser);
-        return new JspView("redirect:/");
+
+        return new ModelAndView("redirect:/");
     }
 }
