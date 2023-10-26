@@ -1,9 +1,7 @@
 package next.controller;
 
-import core.mvc.Controller;
-import core.mvc.JspView;
+import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
 import org.slf4j.Logger;
@@ -13,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class HomeController implements Controller {
+public class HomeController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @Override
@@ -23,6 +21,6 @@ public class HomeController implements Controller {
 
         request.setAttribute("questions", questions);
 
-        return new ModelAndView("home.jsp");
+        return jspView("home.jsp");
     }
 }

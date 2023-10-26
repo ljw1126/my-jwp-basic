@@ -1,6 +1,7 @@
 package next.controller.user;
 
 import core.db.DataBase;
+import core.mvc.AbstractController;
 import core.mvc.Controller;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UpdateUserController implements Controller {
+public class UpdateUserController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
@@ -31,6 +32,6 @@ public class UpdateUserController implements Controller {
         log.debug("Update user : {}", updateUser);
         user.update(updateUser);
 
-        return new ModelAndView("redirect:/");
+        return jspView("redirect:/");
     }
 }

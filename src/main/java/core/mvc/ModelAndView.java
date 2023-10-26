@@ -8,12 +8,8 @@ public class ModelAndView {
     private View view;
     private Map<String, Object> model = new HashMap<>();
 
-    public ModelAndView(String viewName) {
-        if(viewName == null) {
-            this.view = new JsonView();
-        } else {
-            this.view = new JspView(viewName);
-        }
+    public ModelAndView(View view) {
+        this.view = view;
     }
 
     public ModelAndView addAttribute(String key, Object value) {

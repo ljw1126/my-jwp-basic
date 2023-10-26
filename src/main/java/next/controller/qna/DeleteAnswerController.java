@@ -1,24 +1,22 @@
 package next.controller.qna;
 
 import core.jdbc.DataAccessException;
-import core.mvc.Controller;
-import core.mvc.JsonView;
+import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import core.mvc.View;
 import next.dao.AnswerDao;
 import next.model.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DeleteAnswerController implements Controller {
+public class DeleteAnswerController extends AbstractController {
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         long answerId = Long.parseLong(request.getParameter("answerId"));
 
         AnswerDao answerDao = new AnswerDao();
-        ModelAndView modelAndView = new ModelAndView(null);
+        ModelAndView modelAndView = jsonView();
 
         try {
             answerDao.delete(answerId);

@@ -1,6 +1,7 @@
 package next.controller.user;
 
 import core.db.DataBase;
+import core.mvc.AbstractController;
 import core.mvc.Controller;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
@@ -13,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UpdateFormUserController implements Controller {
-
-    private static final Logger log = LoggerFactory.getLogger(UpdateFormUserController.class);
+public class UpdateFormUserController extends AbstractController {
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -26,6 +25,6 @@ public class UpdateFormUserController implements Controller {
         }
 
         request.setAttribute("user", user);
-        return new ModelAndView("/user/updateForm.jsp");
+        return jspView("/user/updateForm.jsp");
     }
 }
