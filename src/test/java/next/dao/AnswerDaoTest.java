@@ -70,4 +70,18 @@ public class AnswerDaoTest {
                 .containsOnly(questionId);
     }
 
+    @Test
+    void delete() {
+        // given
+        long questionId = 7L;
+
+        //when
+        AnswerDao answerDao = new AnswerDao();
+        answerDao.delete(questionId);
+
+        List<Answer> result = answerDao.findAllByQuestionId(questionId);
+
+        assertThat(result).isEmpty();
+    }
+
 }
