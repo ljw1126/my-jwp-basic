@@ -87,16 +87,4 @@ public class Question {
         result = prime * result + (int) (questionId ^ (questionId >>> 32));
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionId=" + questionId +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", createdDate=" + createdDate +
-                ", countOfComment=" + countOfComment +
-                '}';
-    }
 }
