@@ -6,7 +6,9 @@ import core.jdbc.PreparedStatementCreator;
 import core.jdbc.RowMapper;
 import next.model.Answer;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -52,5 +54,12 @@ public class AnswerDao {
                 rs.getLong("questionId"));
 
         return jdbcTemplate.query(sql, rowMapper, questionId);
+    }
+
+    public void delete(long answerId) {
+        MyJdbcTemplate<Answer> jdbcTemplate = new MyJdbcTemplate<>();
+        String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
+
+        jdbcTemplate.update(sql, answerId);
     }
 }
