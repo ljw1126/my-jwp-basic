@@ -148,6 +148,8 @@
 </div>
 -->
 
+<c:out value="${questions}"/>
+
 <%@ include file="/include/footer.jspf" %>
 </body>
 </html>

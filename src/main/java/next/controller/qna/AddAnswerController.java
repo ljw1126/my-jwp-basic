@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.qna;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.mvc.Controller;
@@ -26,10 +26,10 @@ public class AddAnswerController implements Controller {
         AnswerDao answerDao = new AnswerDao();
         Answer savedAnswer = answerDao.insert(answer);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.println(objectMapper.writeValueAsString(savedAnswer));
+        out.println(mapper.writeValueAsString(savedAnswer));
 
         return null;
     }

@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.user;
 
 import core.mvc.Controller;
 import next.dao.UserDao;
