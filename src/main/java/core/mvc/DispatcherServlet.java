@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
@@ -31,8 +32,9 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = rm.get(requestUrl);
         try {
-            View view = controller.execute(req, resp);
-            view.render(req, resp);
+            ModelAndView modelAndView = controller.execute(req, resp);
+            View view = modelAndView.getView();
+            view.render(modelAndView.getModel(), req, resp);
         } catch (Exception e) {
             log.error("Exception : {}", e);
             throw new ServletException(e.getMessage());

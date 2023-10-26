@@ -19,7 +19,7 @@ public class ForwardController implements Controller {
     }
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new JspView(forwardUrl);
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return new ModelAndView(forwardUrl);
     }
 }
