@@ -29,24 +29,13 @@ public class DispatcherServlet extends HttpServlet {
         String requestUrl = req.getRequestURI();
         log.debug("Method : {}, Request URI : {}", req.getMethod(), requestUrl);
 
-
         Controller controller = rm.get(requestUrl);
         try {
-            String viewName = controller.execute(req, resp);
-            move(viewName, req, resp);
+            View view = controller.execute(req, resp);
+            view.render(req, resp);
         } catch (Exception e) {
             log.error("Exception : {}", e);
             throw new ServletException(e.getMessage());
         }
-    }
-
-    private void move(String viewName, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(viewName.startsWith(DEFAULT_REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
-            return;
-        }
-
-        RequestDispatcher rd = request.getRequestDispatcher(viewName);
-        rd.forward(request, response);
     }
 }
