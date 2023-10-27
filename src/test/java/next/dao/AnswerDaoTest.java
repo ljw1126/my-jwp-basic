@@ -85,4 +85,16 @@ public class AnswerDaoTest {
         assertThat(answerDao.findById(answerId)).isNull();
     }
 
+    @Test
+    void count() {
+        //givnen
+        long questionId = 8L;
+
+        //when
+        AnswerDao answerDao = AnswerDao.getInstance();
+        int count = answerDao.count(questionId);
+
+        assertThat(count).isEqualTo(3);
+    }
+
 }
