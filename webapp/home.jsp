@@ -32,7 +32,7 @@
                 </div>
                 <div class="reply" title="댓글">
                   <i class="icon-reply"></i>
-                  <span class="point"><c:out value="${question.countOfComment}"/></span>
+                  <span class="point"><c:out value="${question.countOfAnswer}"/></span>
                 </div>
               </div>
             </div>
@@ -45,17 +45,10 @@
         <div class="col-md-6 text-center">
           <ul class="pagination center-block" style="display:inline-block;">
             <li><a href="#">1</a></li>
-           <%-- <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">»</a></li>--%>
           </ul>
         </div>
         <div class="col-md-3 qna-write">
-          <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+            <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
         </div>
       </div>
     </div>
