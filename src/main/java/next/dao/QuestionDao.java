@@ -1,9 +1,13 @@
 package next.dao;
 
+import core.jdbc.KeyHolder;
 import core.jdbc.MyJdbcTemplate;
+import core.jdbc.PreparedStatementCreator;
 import core.jdbc.RowMapper;
 import next.model.Question;
 
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class QuestionDao {
@@ -55,5 +59,29 @@ public class QuestionDao {
                 );
 
         return jdbcTemplate.queryForObject(sql, rm, questionId);
+    }
+
+    public Question insert(Question question) {
+        String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) " +
+                "VALUES(?, ?, ?, ?, ?)";
+
+        PreparedStatementCreator psc = con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, question.getWriter());
+            ps.setString(2, question.getTitle());
+            ps.setString(3, question.getContents());
+            ps.setTimestamp(4, new Timestamp(question.getCreatedDateToTime()));
+            ps.setInt(5, 0);
+            return ps;
+        };
+
+        KeyHolder keyHolder = new KeyHolder();
+        jdbcTemplate.update(psc, keyHolder);
+        return findById(keyHolder.getId());
+    }
+
+    public void updateCountOfAnswer(long questionId) {
+        String sql = "UPDATE QUESTIONS SET countOfAnswer = countOfAnswer + 1 WHERE questionId = ?";
+        jdbcTemplate.update(sql, questionId);
     }
 }
