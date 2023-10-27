@@ -69,4 +69,10 @@ public class AnswerDao {
         String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
         jdbcTemplate.update(sql, answerId);
     }
+
+    public int count(long questionId) {
+        String sql = "SELECT count(*) as cnt FROM ANSWERS WHERE questionId = ?";
+        RowMapper<Integer> rowMapper = (rs) -> rs.getInt(1);
+        return jdbcTemplate.queryForObject(sql, rowMapper, questionId);
+    }
 }
