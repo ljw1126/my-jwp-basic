@@ -15,13 +15,14 @@ import java.io.IOException;
 public class CreateUserController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 
+    private UserDao dao = UserDao.getInstance();
+
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = new User(request.getParameter("userId"), request.getParameter("password"), request.getParameter("name"),
                 request.getParameter("email"));
         log.debug("User : {}", user);
 
-        UserDao dao = new UserDao();
         try {
             dao.insert(user);
         } catch (Exception e) {

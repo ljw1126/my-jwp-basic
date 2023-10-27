@@ -7,13 +7,25 @@ import next.model.Question;
 import java.util.List;
 
 public class QuestionDao {
+    private static QuestionDao questionDao;
+    private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
+
+    private QuestionDao() {
+    }
+
+    public static QuestionDao getInstance() {
+        if(questionDao == null) {
+            questionDao = new QuestionDao();
+        }
+
+        return questionDao;
+    }
+
 
     // 전체 목록 (이때 content = null)
     public List<Question> findAll() {
-        MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate();
         String sql = "SELECT questionId, writer, title, createdDate, countOfAnswer " +
                 "FROM QUESTIONS ORDER BY questionId desc";
-
 
         RowMapper<Question> rm = (rs) ->
              new Question(
@@ -30,7 +42,6 @@ public class QuestionDao {
 
     // 상세보기
     public Question findById(long questionId) {
-        MyJdbcTemplate<Question> jdbcTemplate = new MyJdbcTemplate();
         String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer " +
                 "FROM QUESTIONS WHERE questionId = ?";
         RowMapper<Question> rm = (rs) ->

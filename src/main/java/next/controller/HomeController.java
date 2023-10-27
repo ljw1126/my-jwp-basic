@@ -13,14 +13,11 @@ import java.util.List;
 
 public class HomeController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+    private QuestionDao questionDao = QuestionDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        QuestionDao questionDao = new QuestionDao();
-        List<Question> questions = questionDao.findAll();
-
-        request.setAttribute("questions", questions);
-
+        request.setAttribute("questions", questionDao.findAll());
         return jspView("home.jsp");
     }
 }

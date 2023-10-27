@@ -11,8 +11,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyJdbcTemplate<T> {
+public class MyJdbcTemplate {
     private static final Logger log = LoggerFactory.getLogger(MyJdbcTemplate.class);
+
+    private static final MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate();
+
+    private MyJdbcTemplate() {}
+
+    public static MyJdbcTemplate getInstance() {
+        return jdbcTemplate;
+    }
+
     public void update(String query, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         try (
             Connection con = ConnectionManager.getConnection();
@@ -55,18 +64,18 @@ public class MyJdbcTemplate<T> {
         };
     }
 
-    public T queryForObject(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
+    public <T> T queryForObject(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         List<T> list = query(query, rowMapper, preparedStatementSetter);
         if(list.isEmpty()) return null;
 
         return list.get(0);
     }
 
-    public T queryForObject(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
+    public <T> T queryForObject(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
         return queryForObject(query, rowMapper, createPreparedStatementSetter(parameters));
     }
 
-    public List<T> query(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
+    public <T> List<T> query(String query, RowMapper<T> rowMapper, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         List<T> result = new ArrayList<>();
         ResultSet rs = null;
 
@@ -96,7 +105,7 @@ public class MyJdbcTemplate<T> {
         }
     }
 
-    public List<T> query(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
+    public <T> List<T> query(String query, RowMapper<T> rowMapper, Object... parameters) throws DataAccessException {
         return query(query, rowMapper, createPreparedStatementSetter(parameters));
     }
 }

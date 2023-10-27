@@ -6,15 +6,26 @@ import core.jdbc.PreparedStatementCreator;
 import core.jdbc.RowMapper;
 import next.model.Answer;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
 public class AnswerDao {
+
+    private static AnswerDao answerDao;
+    private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
+
+    private AnswerDao() {}
+
+    public static AnswerDao getInstance() {
+        if(answerDao == null) {
+            answerDao = new AnswerDao();
+        }
+
+        return answerDao;
+    }
+
     public Answer insert(Answer answer) {
-        MyJdbcTemplate<Answer> jdbcTemplate = new MyJdbcTemplate();
         String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES(?, ?, ?, ?)";
         PreparedStatementCreator psc = (con) -> {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -31,7 +42,6 @@ public class AnswerDao {
     }
 
     public Answer findById(long answerId) {
-        MyJdbcTemplate<Answer> jdbcTemplate = new MyJdbcTemplate();
         String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE answerId = ?";
         RowMapper<Answer> rowMapper = (rs) -> new Answer(
                             rs.getLong("answerId"),
@@ -44,7 +54,6 @@ public class AnswerDao {
     }
 
     public List<Answer> findAllByQuestionId(long questionId) {
-        MyJdbcTemplate<Answer> jdbcTemplate = new MyJdbcTemplate<>();
         String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE questionId = ?";
         RowMapper<Answer> rowMapper = (rs) -> new Answer(
                 rs.getLong("answerId"),
@@ -57,9 +66,7 @@ public class AnswerDao {
     }
 
     public void delete(long answerId) {
-        MyJdbcTemplate<Answer> jdbcTemplate = new MyJdbcTemplate<>();
         String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-
         jdbcTemplate.update(sql, answerId);
     }
 }

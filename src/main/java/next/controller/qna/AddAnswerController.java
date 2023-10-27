@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AddAnswerController extends AbstractController {
-
     private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
+    private AnswerDao answerDao = AnswerDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -22,7 +22,6 @@ public class AddAnswerController extends AbstractController {
 
         log.debug("answer : {}", answer);
 
-        AnswerDao answerDao = new AnswerDao();
         Answer savedAnswer = answerDao.insert(answer);
 
         return jsonView().addAttribute("data", savedAnswer);
