@@ -12,8 +12,9 @@ function addAnswer(e) {
     data: queryString,
     dataType: 'json',
     success: function(result) {
+      $("p.qna-comment-count").find("strong").text(result.count);
+
       const data = result.data;
-      console.log(data);
       const answerTemplate = $("#answerTemplate").html();
       const template = answerTemplate.format(data.writer, new Date(data.createdDate), data.contents, data.answerId);
 
