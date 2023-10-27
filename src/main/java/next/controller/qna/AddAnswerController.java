@@ -3,27 +3,37 @@ package next.controller.qna;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
+import next.dao.QuestionDao;
 import next.model.Answer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import next.model.Result;
+import next.model.User;
+import next.utils.UserSessionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AddAnswerController extends AbstractController {
-    private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
     private AnswerDao answerDao = AnswerDao.getInstance();
+    private QuestionDao questionDao = QuestionDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Answer answer = new Answer(request.getParameter("writer"),
+        if(!UserSessionUtils.isLogined(request.getSession())) {
+            return jsonView().addAttribute("result", Result.fail("Login is required"));
+        }
+
+        User user = UserSessionUtils.getUser(request.getSession());
+        Answer answer = new Answer(user.getUserId(),
                 request.getParameter("contents"),
                 Long.parseLong(request.getParameter("questionId")));
 
-        log.debug("answer : {}", answer);
-
         Answer savedAnswer = answerDao.insert(answer);
+        questionDao.updateCountOfAnswer(savedAnswer.getQuestionId());
+        int count = answerDao.count(savedAnswer.getQuestionId());
 
-        return jsonView().addAttribute("data", savedAnswer);
+        return jsonView()
+                .addAttribute("result", Result.ok())
+                .addAttribute("data", savedAnswer)
+                .addAttribute("count", count);
     }
 }
