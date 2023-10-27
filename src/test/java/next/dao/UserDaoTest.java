@@ -26,7 +26,7 @@ public class UserDaoTest {
         // 생성
         User expected = new User("userId", "password", "name", "jinwoo@email.com");
 
-        UserDao dao = new UserDao();
+        UserDao dao = UserDao.getInstance();
         dao.insert(expected);
 
         User actual = dao.findByUserId(expected.getUserId());
@@ -42,7 +42,7 @@ public class UserDaoTest {
 
     @Test
     void findAll() throws Exception {
-        UserDao dao = new UserDao();
+        UserDao dao = UserDao.getInstance();
         List<User> userList = dao.findAll();
         assertThat(userList).hasSize(1);
     }

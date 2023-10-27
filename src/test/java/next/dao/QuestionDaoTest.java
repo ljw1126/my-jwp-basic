@@ -24,7 +24,7 @@ public class QuestionDaoTest {
     void findAll() {
         //given
         //when
-        QuestionDao questionDao = new QuestionDao();
+        QuestionDao questionDao = QuestionDao.getInstance();
         List<Question> result = questionDao.findAll();
 
         //then
@@ -37,7 +37,7 @@ public class QuestionDaoTest {
         long questionId = 1L;
 
         //when
-        QuestionDao questionDao = new QuestionDao();
+        QuestionDao questionDao = QuestionDao.getInstance();
         Question question = questionDao.findById(questionId);
 
         //then

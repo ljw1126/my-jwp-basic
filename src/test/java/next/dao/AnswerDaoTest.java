@@ -2,6 +2,7 @@ package next.dao;
 
 import core.jdbc.ConnectionManager;
 import next.model.Answer;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class AnswerDaoTest {
         Answer givenAnswer = new Answer(0, "jinwoo", "내용없음체", now, Long.valueOf(1));
 
         //when
-        AnswerDao answerDao = new AnswerDao();
+        AnswerDao answerDao = AnswerDao.getInstance();
         Answer result = answerDao.insert(givenAnswer);
 
         //then
@@ -47,7 +48,7 @@ public class AnswerDaoTest {
         long answerId = 1L;
 
         //when
-        AnswerDao answerDao = new AnswerDao();
+        AnswerDao answerDao = AnswerDao.getInstance();
         Answer result = answerDao.findById(answerId);
 
         //then
@@ -61,7 +62,7 @@ public class AnswerDaoTest {
         long questionId = 7L;
 
         //when
-        AnswerDao answerDao = new AnswerDao();
+        AnswerDao answerDao = AnswerDao.getInstance();
         List<Answer> result = answerDao.findAllByQuestionId(questionId);
 
         //then
@@ -73,15 +74,15 @@ public class AnswerDaoTest {
     @Test
     void delete() {
         // given
-        long questionId = 7L;
+        long answerId = 1L;
 
         //when
-        AnswerDao answerDao = new AnswerDao();
-        answerDao.delete(questionId);
+        AnswerDao answerDao = AnswerDao.getInstance();
+        Assertions.assertThat(answerDao.findById(answerId)).isNotNull();
 
-        List<Answer> result = answerDao.findAllByQuestionId(questionId);
+        answerDao.delete(answerId);
 
-        assertThat(result).isEmpty();
+        assertThat(answerDao.findById(answerId)).isNull();
     }
 
 }
