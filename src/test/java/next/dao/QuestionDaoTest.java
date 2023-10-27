@@ -3,6 +3,7 @@ package next.dao;
 import core.jdbc.ConnectionManager;
 import next.model.Question;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -45,5 +46,36 @@ public class QuestionDaoTest {
                 .isNotNull()
                 .extracting("questionId", "writer", "title")
                 .containsExactly(questionId, "자바지기", "국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까?");
+    }
+
+    @Test
+    void insert() {
+        // given
+        Question given = new Question("jinwoo", "제목없음", "내용없음");
+
+        // when
+        QuestionDao questionDao = QuestionDao.getInstance();
+        Question result = questionDao.insert(given);
+
+        // then
+        assertThat(result)
+                .isNotNull()
+                .extracting("writer", "title", "contents")
+                .containsExactly("jinwoo", "제목없음", "내용없음");
+    }
+
+    @Test
+    void updateCountOfAnswer() {
+        //given
+        Question given = new Question("jinwoo", "제목없음", "내용없음");
+        QuestionDao questionDao = QuestionDao.getInstance();
+        Question saverdQuestion = questionDao.insert(given);
+
+        //when
+        questionDao.updateCountOfAnswer(saverdQuestion.getQuestionId());
+
+        //then
+        assertThat(questionDao.findById(saverdQuestion.getQuestionId()).getCountOfAnswer())
+                .isEqualTo(1);
     }
 }
