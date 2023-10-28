@@ -3,6 +3,7 @@ package next.dao;
 import core.jdbc.ConnectionManager;
 import next.model.Question;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -93,5 +94,18 @@ public class QuestionDaoTest {
         //then
         assertThat(questionDao.findById(questionId)).extracting("title", "contents")
                 .containsExactly("제목없음", "내용없음");
+    }
+
+    @Test
+    void delete() {
+        //given
+        long questionId = 7L;
+
+        //when
+        QuestionDao questionDao = QuestionDao.getInstance();
+        questionDao.delete(questionId);
+
+        //then
+        assertThat(questionDao.findById(questionId)).isNull();
     }
 }
