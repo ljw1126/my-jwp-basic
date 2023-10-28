@@ -3,31 +3,29 @@ package next.controller.qna;
 import core.exception.CannotDeleteException;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import next.dao.QuestionDao;
+import next.model.Result;
 import next.service.QuestionService;
 import next.utils.UserSessionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DeleteQuestionController extends AbstractController {
+public class ApiDeleteQuestionController extends AbstractController {
     private QuestionService questionService = QuestionService.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if(!UserSessionUtils.isLogined(request.getSession())) {
-            return jspView("redirect:/login/loginForm");
+            return jsonView().addAttribute("data", Result.fail("로그인이 필요합니다"));
         }
 
-        long questionId = Long.parseLong(request.getParameter("questionId"));
         try {
+            long questionId = Long.parseLong(request.getParameter("questionId"));
             questionService.delete(questionId, UserSessionUtils.getUser(request.getSession()));
-            return jspView("redirect:/");
-        } catch (CannotDeleteException e) {
-            return jspView("/qna/show.jsp")
-                    .addAttribute("question", questionService.findById(questionId))
-                    .addAttribute("answerList", questionService.findAllByQuestionId(questionId))
-                    .addAttribute("errorMessage", e.getMessage());
+
+            return jsonView().addAttribute("data", Result.ok());
+        } catch(CannotDeleteException e) {
+            return jsonView().addAttribute("data", Result.fail(e.getMessage()));
         }
     }
 }
