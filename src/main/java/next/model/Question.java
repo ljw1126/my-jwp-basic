@@ -75,6 +75,15 @@ public class Question {
         this.countOfAnswer = countOfAnswer;
     }
 
+    public boolean isSameUser(User user) {
+        return this.writer.equals(user.getUserId());
+    }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
