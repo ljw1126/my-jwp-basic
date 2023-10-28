@@ -1,4 +1,4 @@
-package core.jdbc;
+package core.exception;
 
 public class DataAccessException extends RuntimeException {
     public DataAccessException() {
