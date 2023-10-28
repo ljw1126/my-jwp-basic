@@ -6,6 +6,8 @@ import next.controller.qna.CreateFormQuestionController;
 import next.controller.qna.CreateQuestionController;
 import next.controller.qna.DeleteAnswerController;
 import next.controller.qna.ShowController;
+import next.controller.qna.UpdateFormQuestionController;
+import next.controller.qna.UpdateQuestionController;
 import next.controller.user.ListUserController;
 import next.controller.user.LoginController;
 import next.controller.user.LogoutController;
@@ -42,6 +44,8 @@ public class RequestMapping {
         mapping.put("/qna/show", new ShowController());
         mapping.put("/qna/form", new CreateFormQuestionController());
         mapping.put("/qna/create", new CreateQuestionController());
+        mapping.put("/qna/updateForm", new UpdateFormQuestionController());
+        mapping.put("/qna/update", new UpdateQuestionController());
         mapping.put("/api/qna/addAnswer", new AddAnswerController());
         mapping.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
