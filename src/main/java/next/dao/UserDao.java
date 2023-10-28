@@ -1,6 +1,6 @@
 package next.dao;
 
-import core.jdbc.DataAccessException;
+import core.exception.DataAccessException;
 import core.jdbc.MyJdbcTemplate;
 import next.model.User;
 

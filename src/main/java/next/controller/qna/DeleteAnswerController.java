@@ -1,6 +1,6 @@
 package next.controller.qna;
 
-import core.jdbc.DataAccessException;
+import core.exception.DataAccessException;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
