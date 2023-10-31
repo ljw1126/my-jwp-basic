@@ -11,6 +11,9 @@ CREATE TABLE USERS
 );
 
 INSERT INTO USERS VALUES('admin', '1234', '자바지기', 'admin@gmail.com');
+INSERT INTO USERS VALUES('test1', '1234', '테스터1', 'test1@gmail.com');
+INSERT INTO USERS VALUES('test2', '1234', '테스터2', 'test2@gmail.com');
+INSERT INTO USERS VALUES('test4', '1234', '테스터3', 'test3@gmail.com');
 
 DROP TABLE IF EXISTS QUESTIONS;
 

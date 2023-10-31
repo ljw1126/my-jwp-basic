@@ -20,7 +20,7 @@ public class UserDao {
     }
 
     public void insert(User user) throws DataAccessException {
-        String sql = "INSERT INTO USERS VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO USERS(userId, password, name, email) VALUES(?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
     }
 
