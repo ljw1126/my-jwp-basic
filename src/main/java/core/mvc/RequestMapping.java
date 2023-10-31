@@ -28,9 +28,8 @@ public class RequestMapping {
 
     private Map<String, Controller> mapping = new HashMap<>();
 
-
     public RequestMapping() {}
-
+    
     public void initMapping() {
         mapping.put("/", new HomeController());
         mapping.put("/user/form", new ForwardController("/user/form.jsp"));
