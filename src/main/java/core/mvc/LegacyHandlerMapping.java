@@ -11,13 +11,6 @@ import next.controller.qna.DeleteQuestionController;
 import next.controller.qna.ShowController;
 import next.controller.qna.UpdateFormQuestionController;
 import next.controller.qna.UpdateQuestionController;
-import next.controller.user.ListUserController;
-import next.controller.user.LoginController;
-import next.controller.user.LogoutController;
-import next.controller.user.ProfileController;
-import next.controller.user.UpdateFormUserController;
-import next.controller.user.UpdateUserController;
-import next.controller.user.CreateUserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,17 +26,6 @@ public class LegacyHandlerMapping implements HandlerMapping {
     public LegacyHandlerMapping() {}
 
     public void initMapping() {
-        mapping.put("/", new HomeController());
-        mapping.put("/user/form", new ForwardController("/user/form.jsp"));
-        mapping.put("/user/loginForm", new ForwardController("/user/login.jsp"));
-        mapping.put("/user/list", new ListUserController());
-        mapping.put("/user/profile", new ProfileController());
-        mapping.put("/user/login", new LoginController());
-        mapping.put("/user/logout", new LogoutController());
-        mapping.put("/user/create", new CreateUserController());
-        mapping.put("/user/updateForm", new UpdateFormUserController());
-        mapping.put("/user/update", new UpdateUserController());
-
         mapping.put("/qna/show", new ShowController());
         mapping.put("/qna/form", new CreateFormQuestionController());
         mapping.put("/qna/create", new CreateQuestionController());
