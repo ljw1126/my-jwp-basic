@@ -2,8 +2,11 @@ package core.mvc;
 
 import com.google.common.collect.Lists;
 import core.nmvc.AnnotationHandlerMapping;
+import core.nmvc.HandlerAdapter;
 import core.nmvc.HandlerExecution;
+import core.nmvc.HandlerExecutionHandlerAdapter;
 import core.nmvc.HandlerMapping;
+import core.nmvc.ServletHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +26,8 @@ public class DispatcherServlet extends HttpServlet {
 
     private List<HandlerMapping> mappings = Lists.newArrayList();
 
+    private List<HandlerAdapter> adapters = Lists.newArrayList();
+
     @Override
     public void init() throws ServletException {
         LegacyHandlerMapping lhm = new LegacyHandlerMapping();
@@ -33,6 +38,9 @@ public class DispatcherServlet extends HttpServlet {
 
         mappings.add(lhm);
         mappings.add(ahm);
+
+        adapters.add(new ServletHandlerAdapter());
+        adapters.add(new HandlerExecutionHandlerAdapter());
     }
 
     @Override
@@ -53,11 +61,13 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        if(handler instanceof Controller) {
-            return ((Controller)handler).execute(req, resp);
-        } else {
-            return ((HandlerExecution)handler).handle(req, resp);
+        for(HandlerAdapter adapter : adapters) {
+            if(adapter.support(handler)) {
+                return adapter.execute(handler, req, resp);
+            }
         }
+
+        return null;
     }
 
     private Object getHandler(HttpServletRequest request) {
