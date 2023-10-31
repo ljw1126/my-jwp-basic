@@ -23,13 +23,13 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestMapping {
-    private static final Logger log = LoggerFactory.getLogger(RequestMapping.class);
+public class LegacyHandlerMapping {
+    private static final Logger log = LoggerFactory.getLogger(LegacyHandlerMapping.class);
 
     private Map<String, Controller> mapping = new HashMap<>();
 
-    public RequestMapping() {}
-    
+    public LegacyHandlerMapping() {}
+
     public void initMapping() {
         mapping.put("/", new HomeController());
         mapping.put("/user/form", new ForwardController("/user/form.jsp"));
