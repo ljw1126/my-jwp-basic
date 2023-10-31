@@ -13,17 +13,17 @@ public class HandlerExecution {
 
     private static final Logger log = LoggerFactory.getLogger(HandlerExecution.class);
 
-    private Object declearObject;
+    private Object declearedObject;
     private Method method;
 
-    public HandlerExecution(Object declearObject, Method method) {
-        this.declearObject = declearObject;
+    public HandlerExecution(Object declearedObject, Method method) {
+        this.declearedObject = declearedObject;
         this.method = method;
     }
 
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) {
         try {
-            return (ModelAndView) method.invoke(declearObject, request, response);
+            return (ModelAndView) method.invoke(declearedObject, request, response);
         } catch (IllegalAccessException | InvocationTargetException e) {
             log.error("{} method invoke fail, error message : {}", method, e.getMessage());
             throw new RuntimeException(e.getMessage());
