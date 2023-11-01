@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteQuestionController extends AbstractController {
-    private QuestionService questionService = QuestionService.getInstance(JdbcQuestionDao.getInstance(), JdbcAnswerDao.getInstance());
+    private final QuestionService questionService;
+
+    public DeleteQuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

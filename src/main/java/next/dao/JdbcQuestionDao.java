@@ -11,20 +11,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class JdbcQuestionDao implements QuestionDao {
-    private static JdbcQuestionDao jdbcQuestionDao;
-    private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
 
-    private JdbcQuestionDao() {
+    private final MyJdbcTemplate jdbcTemplate;
+
+    public JdbcQuestionDao() {
+        jdbcTemplate = MyJdbcTemplate.getInstance();
     }
-
-    public static JdbcQuestionDao getInstance() {
-        if(jdbcQuestionDao == null) {
-            jdbcQuestionDao = new JdbcQuestionDao();
-        }
-
-        return jdbcQuestionDao;
-    }
-
 
     // 전체 목록 (이때 content = null)
     @Override

@@ -12,20 +12,12 @@ import next.model.User;
 import java.util.List;
 
 public class QuestionService {
-    private static QuestionService questionService;
     private QuestionDao questionDao;
     private AnswerDao answerDao;
 
     public QuestionService(QuestionDao questionDao, AnswerDao answerDao) {
         this.questionDao = questionDao;
         this.answerDao = answerDao;
-    }
-
-    public static QuestionService getInstance(QuestionDao questionDao, AnswerDao answerDao) {
-        if(questionService == null) {
-            questionService = new QuestionService(questionDao, answerDao);
-        }
-        return questionService;
     }
 
     public void delete(long questionId, User user) throws CannotDeleteException{

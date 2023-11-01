@@ -11,18 +11,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class JdbcAnswerDao implements AnswerDao {
+    private final MyJdbcTemplate jdbcTemplate;
 
-    private static JdbcAnswerDao jdbcAnswerDao;
-    private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
-
-    private JdbcAnswerDao() {}
-
-    public static JdbcAnswerDao getInstance() {
-        if(jdbcAnswerDao == null) {
-            jdbcAnswerDao = new JdbcAnswerDao();
-        }
-
-        return jdbcAnswerDao;
+    public JdbcAnswerDao() {
+        jdbcTemplate = MyJdbcTemplate.getInstance();
     }
 
     @Override
