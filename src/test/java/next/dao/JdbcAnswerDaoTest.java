@@ -31,7 +31,7 @@ public class JdbcAnswerDaoTest {
         Answer givenAnswer = new Answer(0, "jinwoo", "내용없음체", now, Long.valueOf(1));
 
         //when
-        JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+        AnswerDao answerDao = new JdbcAnswerDao();
         Answer result = answerDao.insert(givenAnswer);
 
         //then
@@ -48,7 +48,7 @@ public class JdbcAnswerDaoTest {
         long answerId = 1L;
 
         //when
-        JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+        AnswerDao answerDao = new JdbcAnswerDao();
         Answer result = answerDao.findById(answerId);
 
         //then
@@ -62,7 +62,7 @@ public class JdbcAnswerDaoTest {
         long questionId = 7L;
 
         //when
-        JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+        AnswerDao answerDao = new JdbcAnswerDao();
         List<Answer> result = answerDao.findAllByQuestionId(questionId);
 
         //then
@@ -77,7 +77,7 @@ public class JdbcAnswerDaoTest {
         long answerId = 1L;
 
         //when
-        JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+        AnswerDao answerDao = new JdbcAnswerDao();
         Assertions.assertThat(answerDao.findById(answerId)).isNotNull();
 
         answerDao.delete(answerId);
@@ -91,7 +91,7 @@ public class JdbcAnswerDaoTest {
         long questionId = 8L;
 
         //when
-        JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+        AnswerDao answerDao = new JdbcAnswerDao();
         int count = answerDao.count(questionId);
 
         assertThat(count).isEqualTo(3);

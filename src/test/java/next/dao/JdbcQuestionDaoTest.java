@@ -24,7 +24,7 @@ public class JdbcQuestionDaoTest {
     void findAll() {
         //given
         //when
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         List<Question> result = questionDao.findAll();
 
         //then
@@ -37,7 +37,7 @@ public class JdbcQuestionDaoTest {
         long questionId = 1L;
 
         //when
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         Question question = questionDao.findById(questionId);
 
         //then
@@ -53,7 +53,7 @@ public class JdbcQuestionDaoTest {
         Question given = new Question("jinwoo", "제목없음", "내용없음");
 
         // when
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         Question result = questionDao.insert(given);
 
         // then
@@ -67,7 +67,7 @@ public class JdbcQuestionDaoTest {
     void updateCountOfAnswer() {
         //given
         Question given = new Question("jinwoo", "제목없음", "내용없음");
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         Question saverdQuestion = questionDao.insert(given);
 
         //when
@@ -82,7 +82,7 @@ public class JdbcQuestionDaoTest {
     void update() {
         //given
         long questionId = 7L;
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         Question question = questionDao.findById(questionId);
 
         //when
@@ -101,7 +101,7 @@ public class JdbcQuestionDaoTest {
         long questionId = 7L;
 
         //when
-        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
+        QuestionDao questionDao = new JdbcQuestionDao();
         questionDao.delete(questionId);
 
         //then

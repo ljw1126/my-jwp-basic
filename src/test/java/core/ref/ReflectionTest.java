@@ -30,7 +30,14 @@ public class ReflectionTest {
         Class<User> clazz = (Class<User>) Class.forName("next.model.User");
         Constructor<User>[] constructors = (Constructor<User>[]) clazz.getDeclaredConstructors();
 
-        User user = newInstanceWithConstructorArgs(constructors[0]);
+        User user = null;
+        for(Constructor<User> constructor : constructors) {
+            if(constructor.getParameterTypes().length == 4) {
+                user = newInstanceWithConstructorArgs(constructor);
+                break;
+            }
+        }
+
 
         assertThat(user).isNotNull();
         assertThat(user).extracting("userId", "password", "name", "email")
