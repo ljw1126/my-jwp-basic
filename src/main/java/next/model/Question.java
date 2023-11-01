@@ -11,6 +11,11 @@ public class Question {
     private Date createdDate;
     private int countOfAnswer;
 
+    public Question(long questionId, String writer) {
+        this.questionId = questionId;
+        this.writer = writer;
+    }
+
     public Question(String writer, String title, String contents) {
         this(0, writer, title, contents, new Date(), 0);
     }

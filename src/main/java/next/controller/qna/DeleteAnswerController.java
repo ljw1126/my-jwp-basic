@@ -3,14 +3,14 @@ package next.controller.qna;
 import core.exception.DataAccessException;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import next.dao.AnswerDao;
+import next.dao.JdbcAnswerDao;
 import next.model.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteAnswerController extends AbstractController {
-    private AnswerDao answerDao = AnswerDao.getInstance();
+    private JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

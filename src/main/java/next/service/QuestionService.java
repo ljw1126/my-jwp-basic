@@ -1,8 +1,10 @@
 package next.service;
 
 import next.dao.AnswerDao;
-import next.dao.QuestionDao;
+import next.dao.JdbcAnswerDao;
+import next.dao.JdbcQuestionDao;
 import core.exception.CannotDeleteException;
+import next.dao.QuestionDao;
 import next.model.Answer;
 import next.model.Question;
 import next.model.User;
@@ -10,11 +12,19 @@ import next.model.User;
 import java.util.List;
 
 public class QuestionService {
-    private static QuestionService questionService = new QuestionService();
-    private QuestionDao questionDao = QuestionDao.getInstance();
-    private AnswerDao answerDao = AnswerDao.getInstance();
+    private static QuestionService questionService;
+    private QuestionDao questionDao;
+    private AnswerDao answerDao;
 
-    public static QuestionService getInstance() {
+    public QuestionService(QuestionDao questionDao, AnswerDao answerDao) {
+        this.questionDao = questionDao;
+        this.answerDao = answerDao;
+    }
+
+    public static QuestionService getInstance(QuestionDao questionDao, AnswerDao answerDao) {
+        if(questionService == null) {
+            questionService = new QuestionService(questionDao, answerDao);
+        }
         return questionService;
     }
 

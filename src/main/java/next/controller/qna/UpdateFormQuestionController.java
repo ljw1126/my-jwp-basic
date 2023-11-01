@@ -2,7 +2,7 @@ package next.controller.qna;
 
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import next.dao.QuestionDao;
+import next.dao.JdbcQuestionDao;
 import next.model.Question;
 import next.utils.UserSessionUtils;
 
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UpdateFormQuestionController extends AbstractController {
-    private QuestionDao questionDao = QuestionDao.getInstance();
+    private JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

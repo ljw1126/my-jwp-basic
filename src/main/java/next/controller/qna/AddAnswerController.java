@@ -2,8 +2,8 @@ package next.controller.qna;
 
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import next.dao.AnswerDao;
-import next.dao.QuestionDao;
+import next.dao.JdbcAnswerDao;
+import next.dao.JdbcQuestionDao;
 import next.model.Answer;
 import next.model.Result;
 import next.model.User;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AddAnswerController extends AbstractController {
-    private AnswerDao answerDao = AnswerDao.getInstance();
-    private QuestionDao questionDao = QuestionDao.getInstance();
+    private JdbcAnswerDao answerDao = JdbcAnswerDao.getInstance();
+    private JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

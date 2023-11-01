@@ -3,7 +3,8 @@ package next.controller.qna;
 import core.exception.CannotDeleteException;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import next.dao.QuestionDao;
+import next.dao.JdbcAnswerDao;
+import next.dao.JdbcQuestionDao;
 import next.service.QuestionService;
 import next.utils.UserSessionUtils;
 
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteQuestionController extends AbstractController {
-    private QuestionService questionService = QuestionService.getInstance();
+    private QuestionService questionService = QuestionService.getInstance(JdbcQuestionDao.getInstance(), JdbcAnswerDao.getInstance());
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
