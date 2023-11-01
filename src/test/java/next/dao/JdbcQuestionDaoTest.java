@@ -3,7 +3,6 @@ package next.dao;
 import core.jdbc.ConnectionManager;
 import next.model.Question;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -13,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class QuestionDaoTest {
+public class JdbcQuestionDaoTest {
     @BeforeEach
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -25,7 +24,7 @@ public class QuestionDaoTest {
     void findAll() {
         //given
         //when
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         List<Question> result = questionDao.findAll();
 
         //then
@@ -38,7 +37,7 @@ public class QuestionDaoTest {
         long questionId = 1L;
 
         //when
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         Question question = questionDao.findById(questionId);
 
         //then
@@ -54,7 +53,7 @@ public class QuestionDaoTest {
         Question given = new Question("jinwoo", "제목없음", "내용없음");
 
         // when
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         Question result = questionDao.insert(given);
 
         // then
@@ -68,7 +67,7 @@ public class QuestionDaoTest {
     void updateCountOfAnswer() {
         //given
         Question given = new Question("jinwoo", "제목없음", "내용없음");
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         Question saverdQuestion = questionDao.insert(given);
 
         //when
@@ -83,7 +82,7 @@ public class QuestionDaoTest {
     void update() {
         //given
         long questionId = 7L;
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         Question question = questionDao.findById(questionId);
 
         //when
@@ -102,7 +101,7 @@ public class QuestionDaoTest {
         long questionId = 7L;
 
         //when
-        QuestionDao questionDao = QuestionDao.getInstance();
+        JdbcQuestionDao questionDao = JdbcQuestionDao.getInstance();
         questionDao.delete(questionId);
 
         //then
