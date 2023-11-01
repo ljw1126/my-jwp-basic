@@ -10,23 +10,24 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class QuestionDao {
-    private static QuestionDao questionDao;
+public class JdbcQuestionDao implements QuestionDao {
+    private static JdbcQuestionDao jdbcQuestionDao;
     private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
 
-    private QuestionDao() {
+    private JdbcQuestionDao() {
     }
 
-    public static QuestionDao getInstance() {
-        if(questionDao == null) {
-            questionDao = new QuestionDao();
+    public static JdbcQuestionDao getInstance() {
+        if(jdbcQuestionDao == null) {
+            jdbcQuestionDao = new JdbcQuestionDao();
         }
 
-        return questionDao;
+        return jdbcQuestionDao;
     }
 
 
     // 전체 목록 (이때 content = null)
+    @Override
     public List<Question> findAll() {
         String sql = "SELECT questionId, writer, title, createdDate, countOfAnswer " +
                 "FROM QUESTIONS ORDER BY questionId desc";
@@ -45,6 +46,7 @@ public class QuestionDao {
     }
 
     // 상세보기
+    @Override
     public Question findById(long questionId) {
         String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer " +
                 "FROM QUESTIONS WHERE questionId = ?";
@@ -61,6 +63,7 @@ public class QuestionDao {
         return jdbcTemplate.queryForObject(sql, rm, questionId);
     }
 
+    @Override
     public Question insert(Question question) {
         String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) " +
                 "VALUES(?, ?, ?, ?, ?)";
@@ -80,16 +83,19 @@ public class QuestionDao {
         return findById(keyHolder.getId());
     }
 
+    @Override
     public void updateCountOfAnswer(long questionId) {
         String sql = "UPDATE QUESTIONS SET countOfAnswer = countOfAnswer + 1 WHERE questionId = ?";
         jdbcTemplate.update(sql, questionId);
     }
 
+    @Override
     public void update(Question question) {
         String sql = "UPDATE QUESTIONS SET title = ?, contents = ? WHERE questionId = ?";
         jdbcTemplate.update(sql, question.getTitle(), question.getContents(), question.getQuestionId());
     }
 
+    @Override
     public void delete(long questionId) {
         String sql = "DELETE FROM QUESTIONS WHERE questionId = ?";
         jdbcTemplate.update(sql, questionId);

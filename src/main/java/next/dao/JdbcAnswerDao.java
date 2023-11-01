@@ -10,21 +10,22 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class AnswerDao {
+public class JdbcAnswerDao implements AnswerDao {
 
-    private static AnswerDao answerDao;
+    private static JdbcAnswerDao jdbcAnswerDao;
     private MyJdbcTemplate jdbcTemplate = MyJdbcTemplate.getInstance();
 
-    private AnswerDao() {}
+    private JdbcAnswerDao() {}
 
-    public static AnswerDao getInstance() {
-        if(answerDao == null) {
-            answerDao = new AnswerDao();
+    public static JdbcAnswerDao getInstance() {
+        if(jdbcAnswerDao == null) {
+            jdbcAnswerDao = new JdbcAnswerDao();
         }
 
-        return answerDao;
+        return jdbcAnswerDao;
     }
 
+    @Override
     public Answer insert(Answer answer) {
         String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES(?, ?, ?, ?)";
         PreparedStatementCreator psc = (con) -> {
@@ -41,6 +42,7 @@ public class AnswerDao {
         return findById(keyHolder.getId());
     }
 
+    @Override
     public Answer findById(long answerId) {
         String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE answerId = ?";
         RowMapper<Answer> rowMapper = (rs) -> new Answer(
@@ -53,6 +55,7 @@ public class AnswerDao {
         return jdbcTemplate.queryForObject(sql, rowMapper, answerId);
     }
 
+    @Override
     public List<Answer> findAllByQuestionId(long questionId) {
         String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE questionId = ?";
         RowMapper<Answer> rowMapper = (rs) -> new Answer(
@@ -65,11 +68,13 @@ public class AnswerDao {
         return jdbcTemplate.query(sql, rowMapper, questionId);
     }
 
+    @Override
     public void delete(long answerId) {
         String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
         jdbcTemplate.update(sql, answerId);
     }
 
+    @Override
     public int count(long questionId) {
         String sql = "SELECT count(*) as cnt FROM ANSWERS WHERE questionId = ?";
         RowMapper<Integer> rowMapper = (rs) -> rs.getInt(1);
