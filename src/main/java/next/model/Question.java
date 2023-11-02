@@ -1,6 +1,9 @@
 package next.model;
 
+import core.exception.CannotDeleteException;
+
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Question {
@@ -87,6 +90,20 @@ public class Question {
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public boolean canDelete(User user, List<Answer> answers) throws CannotDeleteException {
+        if(!this.isSameUser(user)) {
+            throw new CannotDeleteException("다른 사용자가 쓴 글을 삭제할 수 없습니다");
+        }
+
+        for(Answer answer : answers) {
+            if(!answer.canDelete(user)) {
+                throw new CannotDeleteException("다른 사용자의 답변이 존재하여 질문을 삭제할 수 없습니다");
+            }
+        }
+
+        return true;
     }
 
     @Override

@@ -62,4 +62,8 @@ public class User {
         this.name = updateUser.name;
         this.email = updateUser.email;
     }
+
+    public boolean isSameUser(String writer) {
+        return this.userId.equals(writer);
+    }
 }

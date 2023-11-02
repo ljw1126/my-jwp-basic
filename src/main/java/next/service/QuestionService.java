@@ -26,17 +26,10 @@ public class QuestionService {
             throw new CannotDeleteException("존재하지 않는 글입니다");
         }
 
-        if(!question.isSameUser(user)) {
-            throw new CannotDeleteException("다른 사용자가 쓴 글을 삭제할 수 없습니다");
+        List<Answer> answers = answerDao.findAllByQuestionId(questionId);
+        if(question.canDelete(user, answers)) {
+            questionDao.delete(questionId);
         }
-
-        List<Answer> answerList = answerDao.findAllByQuestionId(questionId);
-        boolean cantDelete = answerList.stream().map(Answer::getWriter).anyMatch(writer -> !writer.equals(question.getWriter()));
-        if(cantDelete) {
-            throw new CannotDeleteException("다른 사용자의 답변이 존재하여 질문을 삭제할 수 없습니다");
-        }
-
-        questionDao.delete(questionId);
     }
 
     public Question findById(long questionId) {
