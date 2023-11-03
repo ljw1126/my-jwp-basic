@@ -1,6 +1,7 @@
 package next.controller.qna;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.exception.CannotDeleteException;
@@ -22,6 +23,7 @@ public class QuestionController extends AbstractNewController {
     private final QuestionDao questionDao;
     private final AnswerDao answerDao;
 
+    @Inject
     public QuestionController(QuestionService questionService, QuestionDao questionDao, AnswerDao answerDao) {
         this.questionService = questionService;
         this.questionDao = questionDao;
@@ -93,7 +95,7 @@ public class QuestionController extends AbstractNewController {
         return jspView("redirect:/");
     }
 
-    @RequestMapping(value = "/qna/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/qna/delete", method = RequestMethod.GET)
     public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if(!UserSessionUtils.isLogined(request.getSession())) {
             return jspView("redirect:/login/loginForm");

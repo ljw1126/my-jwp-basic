@@ -1,10 +1,12 @@
 package next.controller.user;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.mvc.ModelAndView;
 import core.nmvc.AbstractNewController;
+import next.dao.JdbcUserDao;
 import next.dao.UserDao;
 import next.model.User;
 import next.utils.UserSessionUtils;
@@ -19,7 +21,12 @@ import javax.servlet.http.HttpSession;
 public class UserController extends AbstractNewController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    private UserDao userDao = UserDao.getInstance();
+    private UserDao userDao;
+
+    @Inject
+    public UserController(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @RequestMapping(value = "/user/create", method = RequestMethod.POST)
     public ModelAndView createUser(HttpServletRequest request, HttpServletResponse response) {
@@ -47,7 +54,7 @@ public class UserController extends AbstractNewController {
         return jspView("/user/form.jsp");
     }
 
-    @RequestMapping("/user/loginForm")
+    @RequestMapping(value = "/user/loginForm", method = RequestMethod.GET)
     public ModelAndView userLoginForm(HttpServletRequest request, HttpServletResponse response) {
         return jspView("/user/login.jsp");
     }

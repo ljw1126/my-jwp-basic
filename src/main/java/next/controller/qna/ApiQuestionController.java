@@ -1,6 +1,7 @@
 package next.controller.qna;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.exception.CannotDeleteException;
@@ -24,6 +25,7 @@ public class ApiQuestionController extends AbstractNewController {
     private final AnswerDao answerDao;
     private final QuestionDao questionDao;
 
+    @Inject
     public ApiQuestionController(QuestionService questionService, AnswerDao answerDao, QuestionDao questionDao) {
         this.questionService = questionService;
         this.answerDao = answerDao;
@@ -36,7 +38,7 @@ public class ApiQuestionController extends AbstractNewController {
                 .addAttribute("status", Result.ok());
     }
 
-    @RequestMapping(value = "/api/qna/deleteQuestion", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/qna/deleteQuestion", method = RequestMethod.GET)
     public ModelAndView deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if(!UserSessionUtils.isLogined(request.getSession())) {
             return jsonView().addAttribute("data", Result.fail("로그인이 필요합니다"));
