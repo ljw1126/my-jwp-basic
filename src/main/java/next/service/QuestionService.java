@@ -1,5 +1,7 @@
 package next.service;
 
+import core.annotation.Inject;
+import core.annotation.Service;
 import next.dao.AnswerDao;
 import next.dao.JdbcAnswerDao;
 import next.dao.JdbcQuestionDao;
@@ -11,10 +13,12 @@ import next.model.User;
 
 import java.util.List;
 
+@Service
 public class QuestionService {
-    private QuestionDao questionDao;
-    private AnswerDao answerDao;
+    private final QuestionDao questionDao;
+    private final AnswerDao answerDao;
 
+    @Inject
     public QuestionService(QuestionDao questionDao, AnswerDao answerDao) {
         this.questionDao = questionDao;
         this.answerDao = answerDao;
