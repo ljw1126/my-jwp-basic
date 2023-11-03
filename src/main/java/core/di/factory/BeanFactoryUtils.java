@@ -44,8 +44,8 @@ public class BeanFactoryUtils {
     }
 
     /**
-     * 인자로 전달되는 클래스의 구현 클래스. 만약 인자로 전달되는 Class가 인터페이스가 아니면 전달되는 인자가 구현 클래스,
-     * 인터페이스인 경우 BeanFactory가 관리하는 모든 클래스 중에 인터페이스를 구현하는 클래스를 찾아 반환
+     * 만약 인자로 전달되는 injectedClazz가 일반/구현 클래스라면 바로 반환
+     * 인터페이스인 경우 BeanFactory가 관리하는 모든 클래스 중에 해당 injectedClazz인터페이스를 구현하는 클래스를 찾아 반환
      *
      * @param injectedClazz
      * @param preInstantiatedBeans
@@ -57,8 +57,8 @@ public class BeanFactoryUtils {
         }
 
         for(Class<?> clazz : preInstantiatedBeans) {
-            Set<Class<?>> interfaces = Sets.newHashSet(clazz.getInterfaces()); // bean 클래스가 가진 인터페이스 목록 가져옴
-            if(interfaces.contains(injectedClazz)) { // 인터페이스 구현체가 있다면
+            Set<Class<?>> interfaces = Sets.newHashSet(clazz.getInterfaces()); // clazz 클래스 타입이 가지는 인터페이스 목록 가져옴
+            if(interfaces.contains(injectedClazz)) { // 인터페이스 목록에 injectedClazz 인터페이스가 있다면 해당 clazz 반환
                 return clazz;
             }
         }
