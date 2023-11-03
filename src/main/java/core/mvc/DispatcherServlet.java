@@ -22,6 +22,7 @@ import java.util.List;
 public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
+    private static final String basePackage = "next";
     private List<HandlerMapping> mappings = Lists.newArrayList();
 
     private List<HandlerAdapter> adapters = Lists.newArrayList();
@@ -31,7 +32,7 @@ public class DispatcherServlet extends HttpServlet {
         LegacyHandlerMapping lhm = new LegacyHandlerMapping();
         lhm.initMapping();
 
-        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping();
+        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping(basePackage);
         ahm.initialize();
 
         mappings.add(lhm);
