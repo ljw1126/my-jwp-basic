@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class QnaController extends AbstractNewController {
-    private final MyQnaService myQnaService;
-
     @Inject
-    public QnaController(MyQnaService myQnaService) {
-        this.myQnaService = myQnaService;
-    }
+    private MyQnaService myQnaService;
+
+    public QnaController() {}
 
     @RequestMapping("/questions")
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
