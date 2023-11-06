@@ -1,5 +1,7 @@
 package core.jdbc;
 
+import core.annotation.Component;
+import core.annotation.Inject;
 import core.exception.DataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,16 +14,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class MyJdbcTemplate {
     private static final Logger log = LoggerFactory.getLogger(MyJdbcTemplate.class);
 
-    private static final MyJdbcTemplate jdbcTemplate = new MyJdbcTemplate();
-
-    private MyJdbcTemplate() {}
-
-    public static MyJdbcTemplate getInstance() {
-        return jdbcTemplate;
-    }
+    public MyJdbcTemplate() {}
 
     public void update(String query, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         try (
