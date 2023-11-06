@@ -11,11 +11,10 @@ import java.util.List;
 @Repository
 public class JdbcUserDao implements UserDao {
 
-    private final MyJdbcTemplate jdbcTemplate;
-
     @Inject
+    private MyJdbcTemplate jdbcTemplate;
+
     public JdbcUserDao() {
-        jdbcTemplate = MyJdbcTemplate.getInstance();
     }
 
     @Override

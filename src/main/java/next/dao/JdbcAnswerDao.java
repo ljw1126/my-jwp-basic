@@ -14,11 +14,11 @@ import java.util.List;
 
 @Repository
 public class JdbcAnswerDao implements AnswerDao {
-    private final MyJdbcTemplate jdbcTemplate;
 
     @Inject
+    private MyJdbcTemplate jdbcTemplate;
+
     public JdbcAnswerDao() {
-        jdbcTemplate = MyJdbcTemplate.getInstance();
     }
 
     @Override

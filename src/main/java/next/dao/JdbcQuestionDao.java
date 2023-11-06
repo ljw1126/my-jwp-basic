@@ -15,11 +15,10 @@ import java.util.List;
 @Repository
 public class JdbcQuestionDao implements QuestionDao {
 
-    private final MyJdbcTemplate jdbcTemplate;
-
     @Inject
+    private MyJdbcTemplate jdbcTemplate;
+
     public JdbcQuestionDao() {
-        jdbcTemplate = MyJdbcTemplate.getInstance();
     }
 
     // 전체 목록 (이때 content = null)
