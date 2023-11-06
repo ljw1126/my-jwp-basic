@@ -43,7 +43,7 @@ public class BeanFactory implements BeanDefinitionRegistry {
         Class<?> concreteClass = findConcreteClass(requiredType); // 구현 클래스 타입 가져옴
         BeanDefinition beanDefinition = beanDefinitionMap.get(concreteClass);
         bean = inject(beanDefinition);
-        beans.put(concreteClass, bean);
+        registerBean(concreteClass, bean);
         return (T) bean;
     }
 
