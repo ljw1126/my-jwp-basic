@@ -76,8 +76,13 @@ public class BeanDefinition {
     }
 
     public InjectType getResolvedInjectMode() {
-        if(injectConstructor != null) return InjectType.INJECT_CONSTRUCTOR;
-        else if(!injectFields.isEmpty()) return InjectType.INJECT_FIELD;
-        else return InjectType.INJECT_NO;
+        if(injectConstructor != null) {
+            return InjectType.INJECT_CONSTRUCTOR;
+        }
+        if(!injectFields.isEmpty()) {
+            return InjectType.INJECT_FIELD;
+        }
+
+        return InjectType.INJECT_NO;
     }
 }
