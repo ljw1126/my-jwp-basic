@@ -1,7 +1,10 @@
 package core.di.factory;
 
 import core.di.factory.example.MyQnaService;
+import core.di.factory.example.MyUserController;
+import core.di.factory.example.MyUserService;
 import core.di.factory.example.QnaController;
+import next.controller.user.UserController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,21 +12,19 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BeanFactoryTest {
     private Logger log = LoggerFactory.getLogger(BeanFactoryTest.class);
 
+    private static final String basePackage = "core.di.factory.example";
     private BeanFactory beanFactory;
 
     @BeforeEach
     void setUp() {
-        BeanScanner scanner = new BeanScanner("core.di.factory.example");
-        Set<Class<?>> preInstantiatedBeans = scanner.scan();
-        beanFactory = new BeanFactory(preInstantiatedBeans);
+        beanFactory = new BeanFactory();
+        ClasspathBeanDefinitionScanner scanner = new ClasspathBeanDefinitionScanner(beanFactory);
+        scanner.doScan(basePackage);
         beanFactory.initialize();
     }
 
@@ -42,11 +43,20 @@ public class BeanFactoryTest {
 
     @DisplayName("")
     @Test
-    void getControllers() {
-        Map<Class<?>, Object> controllers = beanFactory.getControllers();
-        for(Class<?> key : controllers.keySet()) {
-            log.debug("Bean : {}", key);
-        }
+    void fieldDI() {
+        MyUserService userService = beanFactory.getBean(MyUserService.class);
+
+        assertThat(userService).isNotNull();
+        assertThat(userService.getUserRepository()).isNotNull();
+    }
+
+    @DisplayName("")
+    @Test
+    void setterDI() {
+        MyUserController userController = beanFactory.getBean(MyUserController.class);
+
+        assertThat(userController).isNotNull();
+        assertThat(userController.getMyUserService()).isNotNull();
     }
 
     @AfterEach

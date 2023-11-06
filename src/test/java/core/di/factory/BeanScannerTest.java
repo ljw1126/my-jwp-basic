@@ -11,9 +11,11 @@ public class BeanScannerTest {
 
     @Test
     void scan() {
-        BeanScanner scanner = new BeanScanner("core.di.factory.example");
-        Set<Class<?>> beans = scanner.scan();
-        for(Class<?> clazz : beans) {
+        String basePackage = "core.di.factory.example";
+        ApplicationContext ac = new ApplicationContext(basePackage);
+
+        Set<Class<?>> beanClasses = ac.getBeanClasses();
+        for(Class<?> clazz : beanClasses) {
             log.debug("Bean : {}", clazz);
         }
     }
