@@ -2,16 +2,17 @@ package core.nmvc;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
-import core.di.factory.BeanFactory;
-import core.di.factory.BeanScanner;
+import core.di.factory.ApplicationContext;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,10 +28,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
     public void initialize() {
-        BeanScanner beanScanner = new BeanScanner(basePackage);
-        BeanFactory beanFactory = new BeanFactory(beanScanner.scan());
-        beanFactory.initialize();
-        Map<Class<?>, Object> controllerMap = beanFactory.getControllers();
+        ApplicationContext ac = new ApplicationContext(basePackage);
+        Map<Class<?>, Object> controllerMap = getControllers(ac);
 
         Set<Method> methods = getRequestMappingMethod(controllerMap);
 
@@ -63,4 +62,18 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         log.debug("requestUri : {}, requestMethod : {}", requestURI, requestMethod);
         return handler.get(new HandlerKey(requestURI, requestMethod));
     }
+
+
+    public Map<Class<?>, Object> getControllers(ApplicationContext ac) {
+        Map<Class<?>, Object> controllers = new HashMap<>();
+
+        for(Class<?> clazz : ac.getBeanClasses()) {
+            if(clazz.isAnnotationPresent(Controller.class)) {
+                controllers.put(clazz, ac.getBean(clazz));
+            }
+        }
+
+        return controllers;
+    }
+
 }
