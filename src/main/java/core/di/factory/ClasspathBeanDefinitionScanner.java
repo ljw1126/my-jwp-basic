@@ -1,6 +1,7 @@
 package core.di.factory;
 
 import com.google.common.collect.Sets;
+import core.annotation.Component;
 import core.annotation.Controller;
 import core.annotation.Repository;
 import core.annotation.Service;
@@ -22,7 +23,7 @@ public class ClasspathBeanDefinitionScanner {
 
     public void doScan(Object... basePackage) {
         Reflections reflections = new Reflections(basePackage);
-        Set<Class<?>> preInstantiateBeans = getTypesAnnotatedWith(reflections, Controller.class, Service.class, Repository.class);
+        Set<Class<?>> preInstantiateBeans = getTypesAnnotatedWith(reflections, Controller.class, Service.class, Repository.class, Component.class);
         for(Class<?> candidateBeanType : preInstantiateBeans) {
             log.debug("do scan : {}", candidateBeanType);
             beanDefinitionRegistry.registerBeanDefinition(candidateBeanType, new BeanDefinition(candidateBeanType));
