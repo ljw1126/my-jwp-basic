@@ -1,5 +1,8 @@
 package next.dao;
 
+import core.di.factory.ApplicationContext;
+import core.di.factory.BeanFactory;
+import core.di.factory.ClasspathBeanDefinitionScanner;
 import core.jdbc.ConnectionManager;
 import next.model.Answer;
 import org.assertj.core.api.Assertions;
@@ -17,11 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JdbcAnswerDaoTest {
 
+    private AnswerDao answerDao;
+
     @BeforeEach
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
+
+        ApplicationContext ac = new ApplicationContext("core", "next");
+        answerDao = ac.getBean(AnswerDao.class);
     }
 
     @Test
@@ -31,7 +39,6 @@ public class JdbcAnswerDaoTest {
         Answer givenAnswer = new Answer(0, "jinwoo", "내용없음체", now, Long.valueOf(1));
 
         //when
-        AnswerDao answerDao = new JdbcAnswerDao();
         Answer result = answerDao.insert(givenAnswer);
 
         //then
@@ -48,7 +55,6 @@ public class JdbcAnswerDaoTest {
         long answerId = 1L;
 
         //when
-        AnswerDao answerDao = new JdbcAnswerDao();
         Answer result = answerDao.findById(answerId);
 
         //then
@@ -62,7 +68,6 @@ public class JdbcAnswerDaoTest {
         long questionId = 7L;
 
         //when
-        AnswerDao answerDao = new JdbcAnswerDao();
         List<Answer> result = answerDao.findAllByQuestionId(questionId);
 
         //then
@@ -77,7 +82,6 @@ public class JdbcAnswerDaoTest {
         long answerId = 1L;
 
         //when
-        AnswerDao answerDao = new JdbcAnswerDao();
         Assertions.assertThat(answerDao.findById(answerId)).isNotNull();
 
         answerDao.delete(answerId);
@@ -91,7 +95,6 @@ public class JdbcAnswerDaoTest {
         long questionId = 8L;
 
         //when
-        AnswerDao answerDao = new JdbcAnswerDao();
         int count = answerDao.count(questionId);
 
         assertThat(count).isEqualTo(3);

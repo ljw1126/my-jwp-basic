@@ -1,5 +1,6 @@
 package next.dao;
 
+import core.di.factory.ApplicationContext;
 import core.jdbc.ConnectionManager;
 import next.model.Question;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,18 +14,21 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JdbcQuestionDaoTest {
+    private QuestionDao questionDao;
     @BeforeEach
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
+
+        ApplicationContext ac = new ApplicationContext("core", "next");
+        questionDao = ac.getBean(QuestionDao.class);
     }
 
     @Test
     void findAll() {
         //given
         //when
-        QuestionDao questionDao = new JdbcQuestionDao();
         List<Question> result = questionDao.findAll();
 
         //then
@@ -37,7 +41,6 @@ public class JdbcQuestionDaoTest {
         long questionId = 1L;
 
         //when
-        QuestionDao questionDao = new JdbcQuestionDao();
         Question question = questionDao.findById(questionId);
 
         //then
@@ -53,7 +56,6 @@ public class JdbcQuestionDaoTest {
         Question given = new Question("jinwoo", "제목없음", "내용없음");
 
         // when
-        QuestionDao questionDao = new JdbcQuestionDao();
         Question result = questionDao.insert(given);
 
         // then
@@ -67,7 +69,6 @@ public class JdbcQuestionDaoTest {
     void updateCountOfAnswer() {
         //given
         Question given = new Question("jinwoo", "제목없음", "내용없음");
-        QuestionDao questionDao = new JdbcQuestionDao();
         Question saverdQuestion = questionDao.insert(given);
 
         //when
@@ -82,7 +83,6 @@ public class JdbcQuestionDaoTest {
     void update() {
         //given
         long questionId = 7L;
-        QuestionDao questionDao = new JdbcQuestionDao();
         Question question = questionDao.findById(questionId);
 
         //when
@@ -101,7 +101,6 @@ public class JdbcQuestionDaoTest {
         long questionId = 7L;
 
         //when
-        QuestionDao questionDao = new JdbcQuestionDao();
         questionDao.delete(questionId);
 
         //then

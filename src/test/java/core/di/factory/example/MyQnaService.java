@@ -5,8 +5,11 @@ import core.annotation.Service;
 
 @Service
 public class MyQnaService {
-    private final UserRepository userRepository;
-    private final QuestionRepository questionRepository;
+    private UserRepository userRepository;
+    private QuestionRepository questionRepository;
+
+    public MyQnaService() {
+    }
 
     @Inject
     public MyQnaService(UserRepository userRepository, QuestionRepository questionRepository) {

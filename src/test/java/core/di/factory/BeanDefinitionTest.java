@@ -3,8 +3,6 @@ package core.di.factory;
 import core.di.factory.example.JdbcUserRepository;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.MyUserController;
-import core.di.factory.example.MyUserService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class BeanDefinitionTest {
     private static final Logger log = LoggerFactory.getLogger(BeanScannerTest.class);

@@ -1,5 +1,8 @@
 package next.dao;
 
+import core.di.factory.ApplicationContext;
+import core.di.factory.BeanFactory;
+import core.di.factory.ClasspathBeanDefinitionScanner;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +25,8 @@ public class UserDaoTest {
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-        userDao = new JdbcUserDao();
+        ApplicationContext ac = new ApplicationContext("core", "next");
+        userDao = ac.getBean(UserDao.class);
     }
 
     @Test
