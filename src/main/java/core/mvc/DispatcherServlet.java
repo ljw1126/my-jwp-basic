@@ -22,7 +22,7 @@ import java.util.List;
 public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private static final String basePackage = "next";
+    private static final String[] basePackage = new String[] {"next", "core"};
     private List<HandlerMapping> mappings = Lists.newArrayList();
 
     private List<HandlerAdapter> adapters = Lists.newArrayList();
