@@ -1,46 +1,35 @@
 package core.mvc;
 
 import com.google.common.collect.Lists;
-import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.HandlerAdapter;
 import core.nmvc.HandlerExecutionHandlerAdapter;
 import core.nmvc.HandlerMapping;
-import core.nmvc.ControllerHandlerAdaptor;
-import core.nmvc.ServletHandlerAdaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private static final String[] basePackage = new String[] {"next", "core"};
+    private HandlerMapping handlerMapping;
     private List<HandlerMapping> mappings = Lists.newArrayList();
 
     private List<HandlerAdapter> adapters = Lists.newArrayList();
 
+    public DispatcherServlet(HandlerMapping handlerMapping) {
+        this.handlerMapping = handlerMapping;
+    }
+
     @Override
     public void init() throws ServletException {
-        LegacyHandlerMapping lhm = new LegacyHandlerMapping();
-        lhm.initMapping();
-
-        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping(basePackage);
-        ahm.initialize();
-
-        mappings.add(lhm);
-        mappings.add(ahm);
-
-        adapters.add(new ControllerHandlerAdaptor());
+        mappings.add(handlerMapping);
         adapters.add(new HandlerExecutionHandlerAdapter());
-        adapters.add(new ServletHandlerAdaptor());
     }
 
     @Override
