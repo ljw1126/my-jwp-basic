@@ -1,6 +1,8 @@
 package next.config;
 
 import core.WebApplicationInitializer;
+import core.di.factory.AnnotationConfigApplicationContext;
+import core.di.factory.ApplicationContext;
 import core.mvc.DispatcherServlet;
 import core.nmvc.AnnotationHandlerMapping;
 import org.slf4j.Logger;
@@ -15,11 +17,14 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        AnnotationHandlerMapping hm = new AnnotationHandlerMapping("next", "core");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyConfiguration.class);
+        AnnotationHandlerMapping hm = new AnnotationHandlerMapping(applicationContext);
         hm.initialize();
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(hm));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
+
+        log.info("Start MyWebApplication Initializer");
     }
 }
