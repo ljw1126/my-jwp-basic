@@ -1,8 +1,7 @@
 package core.nmvc;
 
-import core.di.factory.AnnotationConfigApplicationContext;
-import core.di.factory.ApplicationContext;
-import next.config.MyConfiguration;
+import core.di.context.support.AnnotationConfigApplicationContext;
+import core.di.context.ApplicationContext;
 import next.config.MyConfigurationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

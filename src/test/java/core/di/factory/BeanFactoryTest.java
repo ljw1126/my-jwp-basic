@@ -1,10 +1,11 @@
 package core.di.factory;
 
+import core.di.context.annotation.ClasspathBeanDefinitionScanner;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.MyUserController;
 import core.di.factory.example.MyUserService;
 import core.di.factory.example.QnaController;
-import next.controller.user.UserController;
+import core.di.factory.support.DefaultBeanFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,14 +19,14 @@ public class BeanFactoryTest {
     private Logger log = LoggerFactory.getLogger(BeanFactoryTest.class);
 
     private static final String basePackage = "core.di.factory.example";
-    private BeanFactory beanFactory;
+    private DefaultBeanFactory beanFactory;
 
     @BeforeEach
     void setUp() {
-        beanFactory = new BeanFactory();
+        beanFactory = new DefaultBeanFactory();
         ClasspathBeanDefinitionScanner scanner = new ClasspathBeanDefinitionScanner(beanFactory);
         scanner.doScan(basePackage);
-        beanFactory.initialize();
+        beanFactory.preInstantiateSingletons();
     }
 
     @DisplayName("Controller - Service - Repository Bean 생성 및 DI 확인한다")

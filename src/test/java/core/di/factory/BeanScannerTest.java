@@ -1,5 +1,7 @@
 package core.di.factory;
 
+import core.di.context.ApplicationContext;
+import core.di.context.support.AnnotationConfigApplicationContext;
 import next.config.MyConfiguration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

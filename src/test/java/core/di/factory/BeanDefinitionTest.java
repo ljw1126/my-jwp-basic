@@ -1,8 +1,10 @@
 package core.di.factory;
 
+import core.di.factory.support.DefaultBeanDefinition;
 import core.di.factory.example.JdbcUserRepository;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.MyUserController;
+import core.di.factory.support.InjectType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -20,20 +22,20 @@ class BeanDefinitionTest {
     @DisplayName("기본 생성자, 필드/setter, 생성자 주입")
     @Test
     void getResolvedAutowiredMode() {
-        BeanDefinition definition = new BeanDefinition(JdbcUserRepository.class);
+        DefaultBeanDefinition definition = new DefaultBeanDefinition(JdbcUserRepository.class);
         assertThat(definition.getResolvedInjectMode()).isEqualTo(InjectType.INJECT_NO);
 
-        definition = new BeanDefinition(MyUserController.class);
+        definition = new DefaultBeanDefinition(MyUserController.class);
         assertThat(definition.getResolvedInjectMode()).isEqualTo(InjectType.INJECT_FIELD);
 
-        definition = new BeanDefinition(MyQnaService.class);
+        definition = new DefaultBeanDefinition(MyQnaService.class);
         assertThat(definition.getResolvedInjectMode()).isEqualTo(InjectType.INJECT_CONSTRUCTOR);
     }
 
     @DisplayName("setter DI")
     @Test
     void getInjectProperties() {
-        BeanDefinition definition = new BeanDefinition(MyUserController.class);
+        DefaultBeanDefinition definition = new DefaultBeanDefinition(MyUserController.class);
         Set<Field> injectFields = definition.getInjectFields();
 
         assertThat(injectFields.size()).isOne();
@@ -46,7 +48,7 @@ class BeanDefinitionTest {
     @DisplayName("생성자 주입시 Field 사이즈는 0이다")
     @Test
     void getConstructor() {
-        BeanDefinition definition = new BeanDefinition(MyQnaService.class);
+        DefaultBeanDefinition definition = new DefaultBeanDefinition(MyQnaService.class);
         Set<Field> injectFields = definition.getInjectFields();
 
         assertThat(injectFields).isEmpty();

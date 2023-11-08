@@ -1,7 +1,8 @@
 package core.di.factory;
 
+import core.di.context.annotation.AnnotatedBeanDefinitionReader;
+import core.di.factory.support.DefaultBeanFactory;
 import next.config.MyConfigurationTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +12,12 @@ class AnnotatedBeanDefinitionReaderTest {
     @DisplayName("")
     @Test
     void register_simple() {
-        BeanFactory beanFactory = new BeanFactory();
+        DefaultBeanFactory beanFactory = new DefaultBeanFactory();
         AnnotatedBeanDefinitionReader annotatedBeanDefinitionReader
                 = new AnnotatedBeanDefinitionReader(beanFactory);
-        annotatedBeanDefinitionReader.register(MyConfigurationTest.class);
+        annotatedBeanDefinitionReader.loadBeanDefinitions(MyConfigurationTest.class);
 
-        beanFactory.initialize();
+        beanFactory.preInstantiateSingletons();
 
         assertThat(beanFactory.getBean(MyConfigurationTest.class)).isNotNull();
     }

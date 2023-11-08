@@ -1,7 +1,7 @@
 package next.dao;
 
-import core.di.factory.AnnotationConfigApplicationContext;
-import core.di.factory.ApplicationContext;
+import core.di.context.support.AnnotationConfigApplicationContext;
+import core.di.context.ApplicationContext;
 import core.jdbc.ConnectionManager;
 import next.config.MyConfiguration;
 import next.model.Answer;
