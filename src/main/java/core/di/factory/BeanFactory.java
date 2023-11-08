@@ -1,6 +1,7 @@
 package core.di.factory;
 
 import com.google.common.collect.Maps;
+import core.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -54,7 +55,18 @@ public class BeanFactory implements BeanDefinitionRegistry {
         beanDefinition = beanDefinitionMap.get(concreteClass.get());
         bean = inject(beanDefinition);
         registerBean(concreteClass.get(), bean);
+        initialize(bean, concreteClass.get());
         return (T) bean;
+    }
+
+    private void initialize(Object bean, Class<?> beanClass) {
+        Set<Method> initializeMethods = BeanFactoryUtils.getBeanMethods(beanClass, PostConstruct.class);
+        if(initializeMethods.isEmpty()) return;
+
+        for(Method initializeMethod : initializeMethods) {
+            log.debug("@PostConstruct Initialize Method : {}", initializeMethod);
+            BeanFactoryUtils.invokeMethod(initializeMethod, bean, populateArguments(initializeMethod));
+        }
     }
 
     private Optional<Object> createAnnotatedBean(BeanDefinition beanDefinition) {
