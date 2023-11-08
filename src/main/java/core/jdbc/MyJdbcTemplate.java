@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,11 +15,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 public class MyJdbcTemplate {
     private static final Logger log = LoggerFactory.getLogger(MyJdbcTemplate.class);
 
-    public MyJdbcTemplate() {}
+    private DataSource dataSource;
+
+    public MyJdbcTemplate(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public void update(String query, PreparedStatementSetter preparedStatementSetter) throws DataAccessException {
         try (
