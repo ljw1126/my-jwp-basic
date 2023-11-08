@@ -1,5 +1,9 @@
 package core.nmvc;
 
+import core.di.factory.AnnotationConfigApplicationContext;
+import core.di.factory.ApplicationContext;
+import next.config.MyConfiguration;
+import next.config.MyConfigurationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +15,8 @@ class AnnotationHandlerMappingTest {
 
     @BeforeEach
     public void setup() {
-        handlerMapping = new AnnotationHandlerMapping("core.nmvc");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyConfigurationTest.class);
+        handlerMapping = new AnnotationHandlerMapping(applicationContext);
         handlerMapping.initialize();
     }
 

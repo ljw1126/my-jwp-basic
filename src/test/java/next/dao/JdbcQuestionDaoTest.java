@@ -1,7 +1,9 @@
 package next.dao;
 
+import core.di.factory.AnnotationConfigApplicationContext;
 import core.di.factory.ApplicationContext;
 import core.jdbc.ConnectionManager;
+import next.config.MyConfiguration;
 import next.model.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,7 @@ public class JdbcQuestionDaoTest {
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-        ApplicationContext ac = new ApplicationContext("core", "next");
+        ApplicationContext ac = new AnnotationConfigApplicationContext(MyConfiguration.class);
         questionDao = ac.getBean(QuestionDao.class);
     }
 

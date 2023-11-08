@@ -1,5 +1,6 @@
 package core.di.factory;
 
+import next.config.MyConfiguration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,7 @@ public class BeanScannerTest {
 
     @Test
     void scan() {
-        String basePackage = "core.di.factory.example";
-        ApplicationContext ac = new ApplicationContext(basePackage);
+        ApplicationContext ac = new AnnotationConfigApplicationContext(MyConfiguration.class);
 
         Set<Class<?>> beanClasses = ac.getBeanClasses();
         for(Class<?> clazz : beanClasses) {
