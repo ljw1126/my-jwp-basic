@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import core.di.factory.AnnotationConfigApplicationContext;
 import core.di.factory.ApplicationContext;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
@@ -19,17 +20,16 @@ import java.util.Set;
 public class AnnotationHandlerMapping implements HandlerMapping {
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
-    private Object[] basePackage;
+    private ApplicationContext context;
 
     private Map<HandlerKey, HandlerExecution> handler = Maps.newHashMap();
 
-    public AnnotationHandlerMapping(Object... basePackage) {
-        this.basePackage = basePackage;
+    public AnnotationHandlerMapping(ApplicationContext applicationContext) {
+        this.context = applicationContext;
     }
 
     public void initialize() {
-        ApplicationContext ac = new ApplicationContext(basePackage);
-        Map<Class<?>, Object> controllerMap = getControllers(ac);
+        Map<Class<?>, Object> controllerMap = getControllers(context);
 
         Set<Method> methods = getRequestMappingMethod(controllerMap);
 
@@ -64,12 +64,12 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
 
-    public Map<Class<?>, Object> getControllers(ApplicationContext ac) {
+    public Map<Class<?>, Object> getControllers(ApplicationContext context) {
         Map<Class<?>, Object> controllers = new HashMap<>();
 
-        for(Class<?> clazz : ac.getBeanClasses()) {
+        for(Class<?> clazz : context.getBeanClasses()) {
             if(clazz.isAnnotationPresent(Controller.class)) {
-                controllers.put(clazz, ac.getBean(clazz));
+                controllers.put(clazz, context.getBean(clazz));
             }
         }
 
