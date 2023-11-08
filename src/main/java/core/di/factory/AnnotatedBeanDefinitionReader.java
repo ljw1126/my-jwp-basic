@@ -1,5 +1,6 @@
 package core.di.factory;
 
+import core.annotation.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class AnnotatedBeanDefinitionReader {
         beanDefinitionRegistry.registerBeanDefinition(annotatedClazz, new BeanDefinition(annotatedClazz));
 
         // 2. @Configuration 클래스 안 @Bean Method 저장 - 부모 클래스와 Method 정보 정의 후 @Bean 리턴타입으로 저장
-        Set<Method> beanMethods = BeanFactoryUtils.getBeanMethods(annotatedClazz);
+        Set<Method> beanMethods = BeanFactoryUtils.getBeanMethods(annotatedClazz, Bean.class);
         for(Method beanMethod : beanMethods) {
             log.debug("@Bean Method : {}", beanMethod);
             log.debug("DeclargingClass : {}", beanMethod.getDeclaringClass());
