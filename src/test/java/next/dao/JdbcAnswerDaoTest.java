@@ -1,9 +1,9 @@
 package next.dao;
 
+import core.di.factory.AnnotationConfigApplicationContext;
 import core.di.factory.ApplicationContext;
-import core.di.factory.BeanFactory;
-import core.di.factory.ClasspathBeanDefinitionScanner;
 import core.jdbc.ConnectionManager;
+import next.config.MyConfiguration;
 import next.model.Answer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ public class JdbcAnswerDaoTest {
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-        ApplicationContext ac = new ApplicationContext("core", "next");
+        ApplicationContext ac = new AnnotationConfigApplicationContext(MyConfiguration.class);
         answerDao = ac.getBean(AnswerDao.class);
     }
 

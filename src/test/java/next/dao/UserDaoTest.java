@@ -1,9 +1,9 @@
 package next.dao;
 
+import core.di.factory.AnnotationConfigApplicationContext;
 import core.di.factory.ApplicationContext;
-import core.di.factory.BeanFactory;
-import core.di.factory.ClasspathBeanDefinitionScanner;
 import core.jdbc.ConnectionManager;
+import next.config.MyConfiguration;
 import next.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.predicate;
 
 public class UserDaoTest {
     private UserDao userDao;
@@ -25,7 +24,7 @@ public class UserDaoTest {
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-        ApplicationContext ac = new ApplicationContext("core", "next");
+        ApplicationContext ac = new AnnotationConfigApplicationContext(MyConfiguration.class);
         userDao = ac.getBean(UserDao.class);
     }
 
