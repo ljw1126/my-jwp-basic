@@ -1,21 +1,19 @@
 package core.di.factory;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import core.annotation.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
 // 빈을 추가하고 조회하는 역할
 public class BeanFactory implements BeanDefinitionRegistry {
     private static final Logger log = LoggerFactory.getLogger(BeanFactory.class);
@@ -28,41 +26,63 @@ public class BeanFactory implements BeanDefinitionRegistry {
     }
 
     public void initialize() {
-        for(Class<?> clazz : getBeanClasses()) {
+        for (Class<?> clazz : getBeanClasses()) {
             getBean(clazz);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getBean(Class<T> requiredType) { // 재귀 호출
-        Object bean = beans.get(requiredType);
-        if(bean != null) {
+    public <T> T getBean(Class<T> clazz) { // 재귀 호출
+        Object bean = beans.get(clazz);
+        if (bean != null) {
             return (T) bean;
         }
 
-        Class<?> concreteClass = findConcreteClass(requiredType); // 구현 클래스 타입 가져옴
-        BeanDefinition beanDefinition = beanDefinitionMap.get(concreteClass);
+        BeanDefinition beanDefinition = beanDefinitionMap.get(clazz);
+
+        // @Configuration + @Bean의 경우
+        if (beanDefinition != null && beanDefinition instanceof AnnotatedBeanDefinition) {
+            Optional<Object> optionalBean = createAnnotatedBean(beanDefinition);
+            optionalBean.ifPresent(b -> beans.put(clazz, b));
+            return (T) optionalBean.orElse(null);
+        }
+
+        Optional<Class<?>> concreteClass = BeanFactoryUtils.findConcreteClass(clazz, getBeanClasses()); // 구현 클래스 타입 가져옴
+        if (!concreteClass.isPresent())
+            return null;
+
+        beanDefinition = beanDefinitionMap.get(concreteClass.get());
         bean = inject(beanDefinition);
-        registerBean(concreteClass, bean);
+        registerBean(concreteClass.get(), bean);
         return (T) bean;
     }
 
-    // Bean 대상 여부
-    private Class<?> findConcreteClass(Class<?> clazz) {
-        Set<Class<?>> beanClasses = getBeanClasses();
-        Class<?> concreteClass = BeanFactoryUtils.findConcreteClass(clazz, beanClasses);
-        if (!beanClasses.contains(concreteClass)) {
-            throw new IllegalStateException(clazz + "는 Bean이 아닙니다");
-        }
+    private Optional<Object> createAnnotatedBean(BeanDefinition beanDefinition) {
+        AnnotatedBeanDefinition abd = (AnnotatedBeanDefinition) beanDefinition;
+        Method method = abd.getMethod();
+        Object[] args = populateArguments(method);
 
-        return concreteClass;
+        return BeanFactoryUtils.invokeMethod(method, getBean(method.getDeclaringClass()), args);
+    }
+
+    private Object[] populateArguments(Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        List<Object> args = new ArrayList<>();
+        for (Class<?> parameter : parameterTypes) {
+            Object bean = getBean(parameter);
+            if (bean == null) {
+                throw new NullPointerException(parameter + "에 해당하는 Bean이 존재하지 않습니다");
+            }
+            args.add(bean); // TODO. getBean(param) 하는 이유가?
+        }
+        return args.toArray();
     }
 
     private Object inject(BeanDefinition beanDefinition) {
         InjectType resolvedInjectMode = beanDefinition.getResolvedInjectMode();
-        if(resolvedInjectMode == InjectType.INJECT_CONSTRUCTOR) { // 생성자 DI
+        if (resolvedInjectMode == InjectType.INJECT_CONSTRUCTOR) { // 생성자 DI
             return injectConstructor(beanDefinition);
-        } else if(resolvedInjectMode == InjectType.INJECT_FIELD) { // setter, field DI
+        } else if (resolvedInjectMode == InjectType.INJECT_FIELD) { // setter, field DI
             return injectFields(beanDefinition);
         } else { // 기본 생성자
             return BeanUtils.instantiate(beanDefinition.getBeanClazz());
@@ -73,7 +93,7 @@ public class BeanFactory implements BeanDefinitionRegistry {
         Constructor<?> injectConstructor = beanDefinition.getInjectConstructor(); // 생성자 정보 가져옴
 
         List<Object> args = new ArrayList<>();
-        for(Class<?> clazz : injectConstructor.getParameterTypes()) {
+        for (Class<?> clazz : injectConstructor.getParameterTypes()) {
             args.add(getBean(clazz));
         }
 
@@ -83,7 +103,7 @@ public class BeanFactory implements BeanDefinitionRegistry {
     private Object injectFields(BeanDefinition beanDefinition) {
         Object bean = BeanUtils.instantiate(beanDefinition.getBeanClazz()); // 기본 객체 생성
         Set<Field> injectFields = beanDefinition.getInjectFields(); // 주입할 파라미터 정보
-        for(Field field : injectFields) {
+        for (Field field : injectFields) {
             injectField(bean, field);
         }
 
