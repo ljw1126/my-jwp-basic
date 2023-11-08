@@ -1,4 +1,4 @@
-package core.di.factory;
+package core.di.factory.support;
 
 public enum InjectType {
     INJECT_CONSTRUCTOR("생성자 주입"),

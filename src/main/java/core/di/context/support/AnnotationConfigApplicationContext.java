@@ -1,6 +1,10 @@
-package core.di.factory;
+package core.di.context.support;
 
 import core.annotation.ComponentScan;
+import core.di.context.ApplicationContext;
+import core.di.context.annotation.AnnotatedBeanDefinitionReader;
+import core.di.context.annotation.ClasspathBeanDefinitionScanner;
+import core.di.factory.support.DefaultBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +18,14 @@ import java.util.Set;
  */
 public class AnnotationConfigApplicationContext implements ApplicationContext {
     private static final Logger log = LoggerFactory.getLogger(AnnotatedBeanDefinitionReader.class);
-    private BeanFactory beanFactory;
+    private DefaultBeanFactory beanFactory;
 
     public AnnotationConfigApplicationContext(Class<?>... clazz) {
         // 1. @Configuration 의 경우 읽어서 beanFactory 저장
         Object[] basePackages = findBasePackage(clazz);
-        beanFactory = new BeanFactory();
+        beanFactory = new DefaultBeanFactory();
         AnnotatedBeanDefinitionReader reader = new AnnotatedBeanDefinitionReader(beanFactory);
-        reader.register(clazz);
+        reader.loadBeanDefinitions(clazz);
 
         // 2. 그외
         if (basePackages.length > 0) {
@@ -29,7 +33,7 @@ public class AnnotationConfigApplicationContext implements ApplicationContext {
             beanScanner.doScan(basePackages);
         }
 
-        beanFactory.initialize();
+        beanFactory.preInstantiateSingletons();
     }
 
     // @ComponentScan value 값을 읽음

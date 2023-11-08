@@ -1,8 +1,8 @@
 package next.config;
 
 import core.WebApplicationInitializer;
-import core.di.factory.AnnotationConfigApplicationContext;
-import core.di.factory.ApplicationContext;
+import core.di.context.support.AnnotationConfigApplicationContext;
+import core.di.context.ApplicationContext;
 import core.mvc.DispatcherServlet;
 import core.nmvc.AnnotationHandlerMapping;
 import org.slf4j.Logger;

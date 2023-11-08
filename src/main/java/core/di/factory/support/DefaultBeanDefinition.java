@@ -1,18 +1,21 @@
-package core.di.factory;
+package core.di.factory.support;
 
 import com.google.common.collect.Sets;
+import core.di.factory.config.BeanDefinition;
+import core.di.factory.support.BeanFactoryUtils;
+import core.di.factory.support.InjectType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-public class BeanDefinition {
+public class DefaultBeanDefinition implements BeanDefinition {
     private Class<?> beanClazz;
     private Constructor<?> injectConstructor;
     private Set<Field> injectFields;
 
-    public BeanDefinition(Class<?> clazz) {
+    public DefaultBeanDefinition(Class<?> clazz) {
         this.beanClazz = clazz;
         this.injectConstructor = getInjectConstructor(clazz);
         this.injectFields = getInjectFields(clazz, injectConstructor);
@@ -63,18 +66,22 @@ public class BeanDefinition {
         return injectProperties;
     }
 
+    @Override
     public Class<?> getBeanClazz() {
         return beanClazz;
     }
 
+    @Override
     public Constructor<?> getInjectConstructor() {
         return injectConstructor;
     }
 
+    @Override
     public Set<Field> getInjectFields() {
         return injectFields;
     }
 
+    @Override
     public InjectType getResolvedInjectMode() {
         if(injectConstructor != null) {
             return InjectType.INJECT_CONSTRUCTOR;
