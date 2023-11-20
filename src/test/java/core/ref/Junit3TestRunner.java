@@ -9,11 +9,11 @@ import java.lang.reflect.Method;
 public class Junit3TestRunner {
     @DisplayName("Junit3Test에서 test로 시작하는 모든 메서드를 실행한다")
     @Test
-    void run() throws InvocationTargetException, IllegalAccessException, InstantiationException {
+    void run() throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
         Class<Junit3Test> clazz = Junit3Test.class;
         Method[] methods = clazz.getDeclaredMethods();
 
-        Junit3Test object = clazz.newInstance();
+        Junit3Test object = clazz.getDeclaredConstructor().newInstance();
 
         for(Method method : methods) {
             if(method.getName().startsWith("test")) {

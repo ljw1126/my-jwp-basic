@@ -6,6 +6,7 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,9 +28,9 @@ public class ControllerScanner {
         Map<Class<?>, Object> controllers = Maps.newHashMap();
         try {
             for (Class<?> clazz : annotated) {
-                controllers.put(clazz, clazz.newInstance());
+                controllers.put(clazz, clazz.getDeclaredConstructor().newInstance());
             }
-        } catch (IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             log.error(e.getMessage());
         }
 

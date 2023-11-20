@@ -7,6 +7,7 @@ import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +23,8 @@ public class MyServletContainerInitializer implements ServletContainerInitialize
         if(webappInitializerClasses != null) {
             for(Class<?> clazz : webappInitializerClasses) {
                 try {
-                    initializers.add((WebApplicationInitializer) clazz.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
+                    initializers.add((WebApplicationInitializer) clazz.getDeclaredConstructor().newInstance());
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     log.error(e.getMessage());
                 }
             }
